@@ -11,19 +11,30 @@ from user.models import User, Activity
 # from django_redis import get_redis_connection
 from django.http import JsonResponse
 
+from utils.mixin import LoginRequiredMixin
 from utils.shanbay import get_quote
 import datetime
 import markdown
+from itertools import chain
 
 # # http://127.0.0.1:8000
 class IndexView(View):
     '''首页'''
     def get(self, request):
         '''显示首页'''
-        # 从一篇文章开始
+        # 如果是认证用户则显示自己的文章，否则显示管理员的文章
         context = cache.get('index_page')
         if not context:
-            articles = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')[:4]
+            if request.user:
+                articles = Article.objects.filter(user=request.user).filter(is_delete=False).order_by('-create_time')[:4]
+                # 用户文章数量不够则用管理员的文章补齐4个
+                if len(articles)<4:
+                    x = 4 - len(articles)
+                    articles1 = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')[:x]
+                articles = chain(articles,articles1)
+            else:
+                articles = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')[:4]
+                
             types = ArticleType.objects.all() 
             # 获取最近一年的活动
             activitys = Activity.objects.filter(user_id=1)[:364]
@@ -72,27 +83,33 @@ class ArticleTypeList(ListView):
     queryset = ArticleType.objects.filter(is_delete=False)
 
 
-class ArticleTypeCreate(CreateView):
+class ArticleTypeCreate(LoginRequiredMixin,CreateView):
     model = ArticleType
     fields = ['name','logo']
 
 
-class ArticleTypeUpdate(UpdateView):
+class ArticleTypeUpdate(LoginRequiredMixin,UpdateView):
     model = ArticleType
     fields = ['name','logo']
 
 
-class ArticleTypeDelete(DeleteView):
+class ArticleTypeDelete(LoginRequiredMixin,DeleteView):
     model = ArticleType
     success_url = '/article/atypes/'
 
-# Article 相关视图
-class ArticleList(ListView):
-    model = Article
-    template_name = "article_list.html"
-    context_object_name = 'articles'
+from django.contrib.auth import get_user_model
 
-class ArticleDetail(DetailView):
+# Article 相关视图
+class ArticleList(LoginRequiredMixin,ListView):
+    # model = Article
+    template_name = "article_list.html"
+    context_object_name = 'article_list'
+
+    def get_queryset(self):
+        # 动态构建query_set self.request.user
+        return Article.objects.filter(user = self.request.user)
+
+class ArticleDetail(LoginRequiredMixin,DetailView):
     model = Article
     # template_name = "article_detail.html" #加上就会找不到
     context_object_name = 'article'
@@ -107,16 +124,16 @@ class ArticleDetail(DetailView):
             'markdown.extensions.toc'])
         return context
 
-class ArticleCreate(CreateView):
+class ArticleCreate(LoginRequiredMixin,CreateView):
     model = Article
     fields = ['type','user','tag','title','content']
 
 
-class ArticleUpdate(UpdateView):
+class ArticleUpdate(LoginRequiredMixin,UpdateView):
     model = Article
     fields = ['type','user','tag','title','content']
 
-class ArticleDelete(DeleteView):
+class ArticleDelete(LoginRequiredMixin,DeleteView):
     model = Article
     success_url = '/article/'
 
@@ -124,7 +141,7 @@ class ArticleDelete(DeleteView):
 from django.views.generic.dates import YearArchiveView, MonthArchiveView, DayArchiveView
 
 
-class ArticleYearArchiveView(YearArchiveView):
+class ArticleYearArchiveView(LoginRequiredMixin,YearArchiveView):
     queryset = Article.objects.all()
     date_field = "create_time"
     make_object_list = True
@@ -132,7 +149,7 @@ class ArticleYearArchiveView(YearArchiveView):
     allow_empty = True
 
 
-class ArticleMonthArchiveView(MonthArchiveView):
+class ArticleMonthArchiveView(LoginRequiredMixin,MonthArchiveView):
     queryset = Article.objects.all()
     date_field = "create_time"
     make_object_list = True
@@ -140,7 +157,7 @@ class ArticleMonthArchiveView(MonthArchiveView):
     allow_empty = True
 
 
-class ArticleDayArchiveView(DayArchiveView):
+class ArticleDayArchiveView(LoginRequiredMixin,DayArchiveView):
     queryset = Article.objects.all()
     date_field = "create_time"
     allow_future = True

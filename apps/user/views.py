@@ -1,23 +1,21 @@
 
 
-# from django.shortcuts import render,redirect
-# from django.core.urlresolvers import reverse
-# from django.core.mail import send_mail
+from django.shortcuts import render,redirect
+from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
 # from django.http import HttpResponse
-# from django.conf import settings
+from django.conf import settings
 # from django.core.paginator import Paginator
-# from user.models import User, Address
+from user.models import User
 
-# # Create your views here.
-
-# from django.views.generic import View
-# from utils.mixin import LoginRequiredMixin
+from django.views.generic import View
+from utils.mixin import LoginRequiredMixin
 
 
-# from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout
 
-# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-# from itsdangerous import SignatureExpired
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import SignatureExpired
 
 # from celery_tasks.tasks import send_register_active_email
 
@@ -25,142 +23,132 @@
 
 # from django_redis import get_redis_connection
 
+def send_register_active_email(to_email,username,token):
+	'''发送激活邮件,这里没有用异步果然慢'''
+	subject = '阿锐博客欢迎信息'
+	message = ''
+	sender = settings.EMAIL_FROM
+	receiver = [to_email]
+	html_message = """<h1>%s, 欢迎您成为阿锐博客注册会员</h1>请点击下面链接激活您的账户</h1> 
+	<a href='http://127.0.0.1:8000/user/active/%s'>http://127.0.0.1:8000/user/active/%s</a>""" % (username,token,token)
+	send_mail(subject, message, sender, receiver,html_message=html_message)
 
-# class RegisterView(View):
-# 	"""注册视图类"""
-# 	def get(self,request):
-# 		'''显示注册页面'''
-# 		return render(request, 'register.html')
 
-# 	def post(self,request):
-# 		'''进行注册处理'''
-# 		# 1.接受数据
-# 		username = request.POST.get('user_name')
-# 		password = request.POST.get('pwd')
-# 		email = request.POST.get('email')
-# 		allow = request.POST.get('allow')
-# 		# 2.行数据校验
-# 		if not all([username,password,email]):
-# 			return render(request,'register.html',{'errmsg':'数据不完整'})
+class RegisterView(View):
+	"""注册视图类"""
+	def get(self,request):
+		'''显示注册页面'''
+		return render(request, 'user/register.html')
 
-# 		if allow != 'on':
-# 			return render(request,'register.html',{'errmsg':'请同意条款'})
+	def post(self,request):
+		'''进行注册处理'''
+		# 1.接受数据
+		username = request.POST.get('username')
+		password = request.POST.get('pwd')
+		email = request.POST.get('email')
+		allow = request.POST.get('allow')
+		# 2.行数据校验
+		if not all([username,password,email]):
+			return render(request,'user/register.html',{'errmsg':'数据不完整'})
 
-# 		# 校验用户名是否重复
-# 		try:
-# 			user = User.objects.get(username=username)
-# 		except User.DoesNotExist:
-# 			user = None
+		if allow != 'on':
+			return render(request,'user/register.html',{'errmsg':'请同意条款'})
 
-# 		if user:
-# 			return render(request, 'register.html',{'errmsg':'用户名已存在'})
+		# 校验用户名是否重复
+		try:
+			user = User.objects.get(username=username)
+		except User.DoesNotExist:
+			user = None
+
+		if user:
+			return render(request, 'user/register.html',{'errmsg':'用户名已存在'})
 		
-# 		# 3.进行业务处理
-# 		user = User.objects.create_user(username, email, password)
-# 		user.is_active = 0
-# 		user.save()
-# 		# 发送激活邮件，包含激活链接：
-# 		# 激活链接中需要包含用户的身份信息，并且加密
-# 		# 加密使用 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-# 		# 生成激活token
-# 		s = Serializer(settings.SECRET_KEY,3600)
-# 		info = {'confirm':user.id}
-# 		token = s.dumps(info)
-# 		token = token.decode()
-# 		# 发邮件 使用celery 将耗时任务放入队列
-# 		send_register_active_email.delay(email,username,token)
-# 		# 4.返回应答
-# 		return redirect(reverse('article:index'))
+		# 3.进行业务处理
+		user = User.objects.create_user(username, email, password)
+		user.is_active = 0
+		user.save()
+		# 发送激活邮件，包含激活链接：
+		# 激活链接中需要包含用户的身份信息，并且加密
+		# 加密使用 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+		# 生成激活token
+		s = Serializer(settings.SECRET_KEY,3600)
+		info = {'confirm':user.id}
+		token = s.dumps(info)
+		token = token.decode()
+		# 发邮件 使用celery 将耗时任务放入队列
+		send_register_active_email(email,username,token)
+		# send_register_active_email.delay(email,username,token)
+		# 4.返回应答
+		return redirect(reverse('article:index'))
 
-# class ActiveView(View):
-# 	"""docstring for ActiveView"""
-# 	def get(self,request,token):
-# 		'''进行用户激活'''
-# 		# 进行解密，获取要激活的用户信息
-# 		s = Serializer(settings.SECRET_KEY,3600)
-# 		try:
-# 			# 获取激活用户的id
-# 			info = s.loads(token)
-# 			user_id = info['confirm']
-# 			# 根据 id 获取用户信息
-# 			user = User.objects.get(id=user_id)
-# 			user.is_active = 1
-# 			user.save()
-# 			# 跳转到登陆页面
-# 			return redirect(reverse('user:login'))
-# 		except SignatureExpired as e:
-# 			# 激活链接过期
-# 			return HttpResponse('激活链接已过期')
+class ActiveView(View):
+	"""激活链接视图"""
+	def get(self,request,token):
+		'''进行用户激活'''
+		# 进行解密，获取要激活的用户信息
+		s = Serializer(settings.SECRET_KEY,3600)
+		try:
+			# 获取激活用户的id
+			info = s.loads(token)
+			user_id = info['confirm']
+			# 根据 id 获取用户信息
+			user = User.objects.get(id=user_id)
+			user.is_active = 1
+			user.save()
+			# 跳转到登陆页面
+			return redirect(reverse('user:login'))
+		except SignatureExpired as e:
+			# 激活链接过期
+			return HttpResponse('激活链接已过期')
 
-# class LoginView(View):
-# 	"""docstring for LoginView"""
-# 	def get(self,request):
-# 		# 判断是否记住了用户名
-# 		if 'username' in request.COOKIES:
-# 			username = request.COOKIES.get('username')
-# 			checked = 'checked'
-# 		else:
-# 			username = ''
-# 			checked = ''
-# 		return render(request,'login.html',{'username':username,'checked':checked})
+class LoginView(View):
+	"""docstring for LoginView"""
+	def get(self,request):
+		# 判断是否记住了用户名
+		if 'username' in request.COOKIES:
+			username = request.COOKIES.get('username')
+			checked = 'checked'
+		else:
+			username = ''
+			checked = ''
+		return render(request,'user/login.html',{'username':username,'checked':checked})
 
-# 	def post(self,request):
-# 		username = request.POST.get('username')
-# 		password = request.POST.get('pwd')
+	def post(self,request):
+		username = request.POST.get('username')
+		password = request.POST.get('pwd')
 
-# 		if not all([username,password]):
-# 			return render(request,'login.html',{'errmsg':'数据不完整'})
+		if not all([username,password]):
+			return render(request,'user/login.html',{'errmsg':'数据不完整'})
 
 		
-# 		user = authenticate(username=username,password=password)
-# 		if user is not None:
-# 			if user.is_active:
-# 				# 记录用户登录状态
-# 				login(request,user)
-# 				# 跳转到之前页面或者没有就跳到首页
-# 				next_url = request.GET.get('next',reverse('article:index'))
-# 				response = redirect(next_url)
-# 				# 判断是否需要记住用户名
-# 				remember = request.POST.get('remember')
+		user = authenticate(username=username,password=password)
+		if user is not None:
+			if user.is_active:
+				# 记录用户登录状态
+				login(request,user)
+				# 跳转到之前页面或者没有就跳到首页
+				next_url = request.GET.get('next',reverse('article:index'))
+				response = redirect(next_url)
+				# 判断是否需要记住用户名
+				remember = request.POST.get('remember')
 
-# 				if remember == 'on':
-# 					response.set_cookie('username',username, max_age=7*24*3600)
-# 				else:
-# 					response.delete_cookie('username')
-# 				return response
-# 			else:
-# 				return render(request,'login.html',{'errmsg':'账户未激活'})
-# 		else:
-# 			return render(request,'login.html',{'errmsg':'用户名或密码错误'})
+				if remember == 'on':
+					response.set_cookie('username',username, max_age=7*24*3600)
+				else:
+					response.delete_cookie('username')
+				return response
+			else:
+				return render(request,'user/login.html',{'errmsg':'账户未激活'})
+		else:
+			return render(request,'user/login.html',{'errmsg':'用户名或密码错误'})
 
-# # /user
-# class UserInfoView(LoginRequiredMixin,View):
-# 	'''用户中心-信息页'''
-# 	def get(self,request):
-# 		# 如果用户未登录 -> AnonymousUser的实例
-# 		# 如果用户登录 -> User的实例
-# 		# .is_authenticated()
-# 		# 除了你给模板文件传递的模板变量外，django 框架会把request.user 也传递给模板文件
-
-# 		# 获取用户个人信息
-# 		user = request.user
-# 		address = Address.objects.get_default_address(user=user)
-
-# 		# 获取用户浏览记录
-# 		con = get_redis_connection('default')
-# 		history_key = 'history_%d'%user.id
-
-# 		#获取用户最新浏览的5个商品的id
-# 		sku_ids = con.lrange(history_key,0,4)
-		
-# 		# 从数据库中查询具体商品信息
-# 		article_li = list(Article.objects.get(id=i) for i in sku_ids)
-
-# 		# 组织上下文
-# 		context = {'page':'user',
-# 					'address':address,
-# 					'article_li':article_li}
-# 		return render(request,'user_center_info.html',context)
+# /user
+class UserInfoView(LoginRequiredMixin,View):
+	'''用户中心-信息页'''
+	def get(self,request):
+		user = request.user
+		context = {'user':user}
+		return render(request,"user/user_center_info.html",context)
 
 # # /user/order
 # class UserOrderView(LoginRequiredMixin,View):
@@ -272,12 +260,12 @@
 # # 	send_mail('注册激活','',settings.EMAIL_FROM,['213131515@seu.edu.cn'],html_message=msg)
 # # 	return HttpResponse('ok')
 
-# # /user/logout
-# class LogoutView(View):
-# 	"""退出登录"""
-# 	def get(self, request):
-# 		# 清除用户的session信息
-# 		logout(request)
-# 		return redirect(reverse('article:index'))
+# /user/logout
+class LogoutView(View):
+	"""退出登录"""
+	def get(self, request):
+		# 清除用户的session信息
+		logout(request)
+		return redirect(reverse('article:index'))
 
 # some_app/views.py
