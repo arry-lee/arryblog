@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}阿锐的博客-首页{% endblock title %}
+
+
+
+{% block container %}
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-3 column">
+				<img alt="140x140" src="{% static 'images/arry460.png' %}" class="img-thumbnail" />
+				<p class="username">Arry Lee</p>
+				<p class="slogon">A real romantic youth.</p>
+				<p class="location"><span class="glyphicon glyphicon-map-marker"aria-hidden="true"></span>中国 南京</p>
+
+
+				<button type="button" class="btn btn-default btn-block" id="btn1" style="display: none">编辑</button>
+
+				<div class="quote" style="padding-top:60px;">
+					<blockquote>
+						<p>
+							{{content}}
+						</p> 
+						<p>
+							{{translation}}
+						</p>
+						<small><cite>{{author}}</cite></small>
+					</blockquote>
+				</div>
+
+			</div>
+			<div class="col-md-9 column">
+				<div class="tabbable" id="tabs-573644">
+					<ul class="nav nav-tabs" id="nav0">
+						<li class="active">
+							 <a href="#panel-0" data-toggle="tab" id="p0">动态 <span class="Counter">2</span></a>
+						</li>
+						<li>
+							 <a href="#panel-1" data-toggle="tab" id="p1">文章 <span class="Counter">1</span></a>
+						</li>
+						<li>
+							 <a href="#panel-2" data-toggle="tab" id="p2">项目 <span class="Counter">0</span></a>
+						</li>
+						<li>
+							 <a href="#panel-3" data-toggle="tab" id="p3">收藏 <span class="Counter">0</span></a>
+						</li>
+						<li>
+							 <a href="#panel-4" data-toggle="tab" id="p4">关注 <span class="Counter">0</span></a>
+						</li>
+						<li>
+							 <a href="#panel-5" data-toggle="tab" id="p5">粉丝 <span class="Counter">0</span></a>
+						</li>																				
+					</ul>
+
+					<div class="tab-content">
+						<div class="tab-pane active" id="panel-0">
+							{% block panel-0 %}
+							{% endblock panel-0%}
+						</div>
+						<div class="tab-pane" id="panel-1">
+							{% block panel-1 %}
+							{% endblock panel-1%}
+						</div>	
+						<div class="tab-pane" id="panel-2">
+							{% block panel-2 %}
+							{% endblock panel-2%}
+						</div>
+						<div class="tab-pane" id="panel-3">
+							{% block panel-3 %}
+							{% endblock panel-3%}
+						</div>
+						<div class="tab-pane" id="panel-4">
+							{% block panel-4 %}
+							{% endblock panel-4%}
+						</div>	
+						<div class="tab-pane" id="panel-5">
+							{% block panel-5 %}
+							{% endblock panel-5%}
+						</div>																														
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock container %}
+
+
+{% block bottom %}
+
+
+{% endblock bottom %}
+
+{% block bottomfiles %}
+<!-- 	<script type="text/javascript">
+		$(function() {
+			// body...
+			for(var j = 0; j < 7; j++){	
+				var $contrib = $('.js-year-contribution');
+				var $br = $('<br>');
+				var weekday = ['','Mon','','Wed','','Fri',''];
+				var $wd = "<span class='weekday'>"+weekday[j]+"</span>";
+				$contrib.append($wd);
+
+				for (var i = 0; i < 53; i++) {
+						var $contrib = $('.js-year-contribution');
+						var $span = $("<span class='contrib-day'></span>");
+	 					$contrib.append($span);
+				}
+				
+				
+				$contrib.append($br);
+			}
+		})
+
+		{{activitys}}
+
+		$(function() {
+			// body...
+			$('.js-year-contribution .contrib-day').each(function(i){
+		        // var flevel = parseInt(100*Math.random())%5;
+		        var flevel = parseInt();
+		        var colorlist = ['#ebedf0','#c6e48b','#7bc96f','#239a3b','#196127']
+		        $(this).css({'background-color':colorlist[flevel]});
+		    })
+		})
+// ajax 通信 备用
+		// $('#nav0 li a').click(function(){
+		// 	var $id =$(this).prop('id').charAt(1)
+		// 	$.ajax({
+		// 	    url: 'js',
+		// 	    type: 'GET',
+		// 	    dataType: 'json',
+		// 	    data:{'a': $id}
+		// 	})
+		// 	.done(function(data){
+		// 		alert(data.msg)
+		// 	})
+		// 	.fail(function(){
+		// 		alert('服务器超时,请重试')
+		// 	})
+
+		// })
+
+	</script> -->
+{% endblock bottomfiles %}

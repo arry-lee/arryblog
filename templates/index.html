@@ -1,0 +1,151 @@
+{% extends 'index_base.html' %}
+{% load staticfiles %}
+{% block panel-0 %}
+	<h4 class="text-normal">最新动态</h4>
+	<div class="row clearfix">	
+		{% for article in articles %}
+		<div class="col-md-6 column">
+			<div class="article">
+				<a class="title" href="article/{{article.id}}" >
+					<h2>
+					{{article.title}}
+					</h2>
+				</a>
+				<div class="article-content">
+					<p>
+						{{article.content|safe}}
+					</p>
+				</div>
+
+				<p>
+			    <span class="pinned-item-meta py" style="background-color: {{article.tag.color}}"></span>
+			    {{article.tag}}
+				</p>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+
+	<h4 class="text-normal">近一年的贡献</h4>
+	<div class="row clearfix">
+		<div class="js-year-contribution">
+			{% for activity in activitys reversed%}
+			{% if forloop.counter0|divisibleby:52 %}
+			<br>
+			{% endif %}
+			<span class='contrib-day' date='{{activity.activity_date}}' style="background-color: {{activity.activity_level}}"></span>
+			{% endfor %}
+		</div>
+	</div>
+
+	<h4 class="text-normal">最近活动</h4>
+	<div class="row clearfix">
+		<div class="col-md-10 column">
+			<div class="row clearfix">
+				<div class="col-md-1 column">
+					<ul>
+						<li></li>
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+				</div>
+				<div class="col-md-5 column">
+					<ol>
+						<li>
+							没有什么新鲜事
+						</li>
+						<li>
+							Arry 写点什么吧
+						</li>
+						<li>
+							或者去广场看看
+						</li>
+						<li>
+							或许会有所发现
+						</li>
+					</ol>
+				</div>
+
+				<div class="col-md-6 column">
+
+				</div>
+
+			</div> <button type="button" class="btn btn-default btn-block">显示更多</button>
+		</div>
+		<div class="col-md-2 column">
+			 <button type="button" class="btn btn-default btn-block btn-primary">2019</button> <button type="button" class="btn btn-default btn-block btn-normal">2018</button>
+		</div>
+	</div>
+{% endblock panel-0 %}
+
+{% block panel-1 %}
+	<h4 class="text-normal">文章列表</h4>
+	<div class="row clearfix">	
+		<div class="col-md-12 column article">
+			<ul>
+				{% for article in articles %}
+				<li>
+				<a class="title" href="/article/{{article.id}}" >
+					{{article.title}}
+				</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endblock panel-1 %}
+
+{% block panel-2 %}
+	<h4 class="text-normal">项目列表</h4>
+	<div class="row clearfix">	
+		<div class="col-md-12 column article">
+			<ul>
+				{% for type in types %}
+				<li>
+				<a class="title" href="#" >
+					{{type}}
+				</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endblock panel-2 %}
+
+
+{% block panel-3 %}
+	<h4 class="text-normal">收藏列表</h4>
+	<div class="row clearfix">	
+		<div class="col-md-12 column article">
+			<ul>
+				{% for article in articles %}
+				<li>
+				<a class="title" href="#" >
+					{{article.tag}}
+				</a>
+				</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+{% endblock panel-3 %}
+
+
+{% block panel-4 %}
+	<h4 class="text-normal">关注列表</h4>
+	<div class="row clearfix">	
+		<div class="col-md-12 column article">
+			你还没有关注任何人
+		</div>
+	</div>
+{% endblock panel-4 %}
+
+{% block panel-5 %}
+	<h4 class="text-normal">粉丝列表</h4>
+	<div class="row clearfix">	
+		<div class="col-md-12 column article">
+			你还没有任何粉丝
+		</div>
+	</div>
+{% endblock panel-5 %}

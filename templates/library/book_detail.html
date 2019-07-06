@@ -1,0 +1,54 @@
+{% extends "library/base.html" %}
+{% load url from future %}
+
+{% block content %}
+
+<h2>{{ object.title }}</h2>
+
+<p>{% for author in object.authors.all %}
+<a href="{% url 'library:author_detail' pk=author.pk %}">{{ author.name }}</a>
+{% endfor %}
+</p>
+<p>{{ object.year_published|date:"Y" }}</p>
+
+{# 导入评论库模块的模版标签 #}
+{% load comments %}
+
+{% get_comment_count for object as comment_count %}
+
+<h3> 相关评论 {{ comment_count }} 条</h3>
+{% get_comment_list for object as comment_list %}
+
+{% for comment in comment_list %}
+<tr>
+<p>{{ comment.comment }}</p>
+<p>{{ comment.user_name }}</p>
+<p>{{ comment.submit_date }}</p>
+{% endfor %}
+
+<h3> 提交评论表单 </h3>
+{% get_comment_form for object as form %}
+<table>
+ <form action="{% comment_form_target %}" method="post">
+  {% csrf_token %}
+
+  <p><label for="id_name">姓名：</label>{{ form.name }}</p>
+  <p><label for="id_email">邮箱：</label>{{ form.email }}</p>
+  <p><label for="id_url">网站：</label>{{ form.url }}</p>
+  <p><label for="id_comment">评论：</label>{{ form.comment }}</p>
+  {{ form.content_type }}
+  {{ form.object_pk }}
+  {{ form.timestamp }}
+  {{ form.security_hash }}
+  <span style="display: none;">{{ form.honeypot }}</span>
+
+  <tr>
+   <td colspan="2">
+    <input type="submit" name="submit" value="发表评论">
+    <input type="hidden" name="next" value="{% url 'library:book_detail' pk=book.pk %}"/>
+   </td>
+  </tr>
+ </form>
+</table>
+
+{% endblock content %}

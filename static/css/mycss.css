@@ -1,0 +1,166 @@
+.navbar-brand {
+    padding: 10px 0px 9px 10px;
+    display: inline-block;
+}
+
+.navbar-inverse {
+    background-color: #24292e;
+    border-color: #080808;
+}
+
+.form-control{
+    background-color: hsla(0,0%,100%,.125);
+    border: 0;
+    height: 28px;
+    margin-top: 4px;
+}
+
+.navbar-form .btn{
+    background-color: hsla(0,0%,100%,.125);
+    border: 0;
+    width: 28px;
+    height: 28px;
+    margin-top: 4px;
+    margin-left: -2px;
+    padding-left: 7px;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: #fff;
+}
+
+.glyphicon-search{
+    color: #555;
+}
+
+
+
+.Counter {
+    background-color: rgba(27,31,35,.08);
+    border-radius: 20px;
+    color: #586069;
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    padding: 2px 5px;
+}
+
+.article{
+    height: 220px; 
+	border: 2px solid  rgb(209, 213, 218);
+	border-radius: 3px;
+	font-size: 14px;
+	margin-bottom: 16px;
+	padding: 16px;
+	text-align: left;
+
+}
+
+.article-content{
+    margin-top: 0; 
+    height: 110px;
+    line-height: 16px;
+    overflow: hidden;
+}
+/*.article p{
+    overflow: hidden;
+}*/
+
+a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+.pinned-item-meta {
+	width: 12px;
+	height: 12px;
+    display: inline-block;
+	border-radius: 50%;
+}
+
+.cpp {
+	background-color: #f34b7d;
+}
+
+.py {
+	background-color: #3572a5;
+}
+
+.contrib-day {
+	width: 12px;
+	height: 12px;
+    display: inline-block;
+    margin-left: -3px; 
+    border: 1px solid #fff;
+    background-color: rgb(235, 237, 240);
+}
+
+.js-year-contribution{
+	line-height: 10px;
+	margin: 10px;
+	border: 1px solid rgb(209, 213, 218);
+	padding: 20px 50px;
+}
+
+.weekday {
+	width: 30px;
+	height: 12px;
+	display: inline-block;
+}
+
+.quote {
+    padding: 30px 20px;
+}
+
+
+.username {
+    color: #666;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 24px;
+    display: block;
+    margin-top: 20px;
+}
+
+/*.slogon {
+    color: #24292e;
+    font-size: 14px;
+    line-height: 21px;
+}*/
+
+.location {
+    color: #24292e;
+    font-size: 14px;
+    line-height: 21px;
+}
+.glyphicon-map-marker{
+    padding-right: 10px;
+}
+
+/*
+.player{
+    width: 200px;
+    border: 1px dashed #000;
+    color: green;
+}*/
+
+.player {
+    background-color: gold;
+}
+
+/*.progress-li {
+  padding-top: 30px;
+  display: inline-block;  
+}
+.player-progress {  
+    display: inline;
+    background-color:gold;
+    width: 200px;
+}*/
+
+/*.progress .progress-bar{
+    width: 40%;
+    background-color: #24292e;
+}*/

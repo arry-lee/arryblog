@@ -1,0 +1,50 @@
+{% extends 'index_base.html' %}
+{% block title %}阿锐的博客-文章搜索结果列表{% endblock title %}
+
+
+{% block container %}
+<div class="container">
+    <div class="breadcrumb">
+        <span>{{ query }}</span>
+        <span>></span>
+        <span>搜索结果如下:</span>
+    </div>
+
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            {% for item in page %}
+            <h2>
+                <a href="{% url 'article:detail' item.object.id %}">{{ item.object.title }}</a>
+            </h2>
+            <p>
+                {{ item.object.content | striptags}}
+            </p>
+            <p>
+            <span class="pinned-item-meta py" style="background-color: {{item.object.tag.color}}"></span>
+            {{item.object.tag}}
+            </p>
+            <br>
+            {% endfor %}
+            <ul class="pagination">
+                {% if page.has_previous %}
+                    <li><a href="/search?q={{ query }}&page={{ page.previous_page_number }}"><上一页</a></li>
+                {% endif %}
+
+                {% for pindex in paginator.page_range %}
+                    {% if pindex == page.number %}
+                        <li><a href="/search?q={{ query }}&page={{ pindex }}" class="active">{{ pindex }}</a></li>
+                    {% else %}
+                        <li><a href="/search?q={{ query }}&page={{ pindex }}">{{ pindex }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page.has_next %}
+                    <li><a href="/search?q={{ query }}&page={{ page.next_page_number }}">下一页></a></li>
+                {% endif %}         
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock container %}
+
+
