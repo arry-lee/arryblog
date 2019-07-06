@@ -115,7 +115,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -199,3 +199,4 @@ HAYSTACK_SIGNAL_PROCESSOR ='haystack.signals.RealtimeSignalProcessor'
 
 # 指定搜索结果每页显示条数
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
+

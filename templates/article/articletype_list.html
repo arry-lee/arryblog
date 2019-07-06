@@ -1,0 +1,8 @@
+{% block container %}
+    <h2>文章类型列表</h2>
+    <ul>
+        {% for article_type in article_type_list %}
+            <li>{{ article_type.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock container %}

@@ -4,6 +4,7 @@ from tinymce.models import HTMLField
 from user.models import User
 # Create your models here.
 from mdeditor.fields import MDTextField
+from django.core.urlresolvers import reverse
 
 class ArticleType(BaseModel):
     '''文章类型模型类'''
@@ -15,6 +16,9 @@ class ArticleType(BaseModel):
         db_table = 'df_article_type'
         verbose_name = '文章类型'
         verbose_name_plural = verbose_name
+
+    def get_absolute_url(self):
+        return reverse('article:atypes-update',kwargs={'pk':self.pk})
 
     def __str__(self):
         return self.name
@@ -49,6 +53,9 @@ class Article(BaseModel):
         verbose_name = '文章'
         verbose_name_plural = verbose_name
 
+    def get_absolute_url(self):
+        return reverse('article:article-detail',kwargs={'pk':self.pk})
+        
     def __str__(self):
         return self.title
 

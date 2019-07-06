@@ -1,9 +1,7 @@
-{% extends "base.html" %}
-
 {% block container %}
     <h2>文章列表</h2>
     <ul>
-        {% for article in articles %}
+        {% for article in articlests %}
             <li>{{ article.title }}</li>
         {% endfor %}
     </ul>
