@@ -1,7 +1,7 @@
 {% extends "library/base.html" %}
 {% load url from future %}
 
-{% block content %}
+{% block middle %}
 
 <h2>{{ object.title }}</h2>
 
@@ -10,7 +10,11 @@
 {% endfor %}
 </p>
 <p>{{ object.year_published|date:"Y" }}</p>
+{% endblock middle %}
 
+
+
+{% block right %}
 {# 导入评论库模块的模版标签 #}
 {% load comments %}
 
@@ -25,6 +29,7 @@
 <p>{{ comment.user_name }}</p>
 <p>{{ comment.submit_date }}</p>
 {% endfor %}
+
 
 <h3> 提交评论表单 </h3>
 {% get_comment_form for object as form %}
@@ -50,5 +55,5 @@
   </tr>
  </form>
 </table>
+{% endblock right %}
 
-{% endblock content %}

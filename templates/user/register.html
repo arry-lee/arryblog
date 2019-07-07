@@ -1,0 +1,51 @@
+{% extends 'user/base.html' %}
+{% load staticfiles %}
+{% block title %}阿锐博客-注册{% endblock title %}
+
+{% block left %}
+{% endblock left%}
+
+{% block middle %}
+<p>If you are</p>
+<p>A Real Romantic Youth!</p>
+<p>Welcome to Arryblog!</p>
+
+<h3>注册</h3>
+<form class="form-horizontal" method="post" action="/user/register">
+	{% csrf_token %}
+
+	<div class="control-group">
+		 <label class="control-label" for="inputUsername">用户名</label>
+		<div class="controls">
+			<input id="inputUsername" name="username" type="text" />
+		</div>
+	</div>
+	<div class="control-group">
+		 <label class="control-label" for="inputEmail">邮箱</label>
+		<div class="controls">
+			<input id="inputEmail" name="email" type="text" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		 <label class="control-label" for="inputPassword">密码</label>
+		<div class="controls">
+			<input id="inputPassword" type="password" name="pwd"/>
+		</div>
+	</div>
+
+	<div class="control-group">
+		 <label class="control-label" for="inputPassword2">确认密码</label>
+		<div class="controls">
+			<input id="inputPassword2" type="password" name="cpwd"/>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<div class="controls">
+			 <label class="checkbox"><input type="checkbox" name="allow" checked="checked" />同意注册协议</label> <button type="submit" class="btn">注册</button>
+		</div>
+	</div>
+</form>
+{{ errmsg }}
+{% endblock middle %}

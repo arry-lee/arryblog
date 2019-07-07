@@ -1,7 +1,7 @@
 {% extends "library/base.html" %}
 {% load url from future %}
 
-{% block content %}
+{% block middle %}
 
 <h2>Are you sure you want to delete "{{ object.title }}"?</h2>
 <form action="." method="post">
@@ -9,4 +9,4 @@
 <input type="submit" value="Delete" />
 <p><a href="{% url 'library:book_detail' pk=object.pk %}">Nope</a></p>
 </form>
-{% endblock content %}
+{% endblock middle %}

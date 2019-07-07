@@ -1,7 +1,7 @@
 {% extends "library/base.html" %}
 {% load url from future %}
 
-{% block content %}
+{% block middle %}
 
 <h2>{{ object.title }}</h2>
 <form action="." method="post">
@@ -11,4 +11,4 @@
 <tr><th></th><td><input type="submit" /></td></tr>
 </table>
 </form>
-{% endblock content %}
+{% endblock middle %}

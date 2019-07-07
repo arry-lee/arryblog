@@ -1,9 +1,9 @@
-{% extends 'index_base.html' %}
-{% block container %}
+{% extends 'article/article_base.html' %}
+{% block middle %}
 <div>
 	<h1>{{ year|date:"Y" }} 年的所有文章</h1>
 	{% for obj in object_list %}
 		<p>{{ obj.title }} - {{ obj.create_time|date:"F j, Y" }}</p>
 	{% endfor %}
 </div>
-{% endblock container %}
+{% endblock middle %}

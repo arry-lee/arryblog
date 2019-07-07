@@ -25,13 +25,15 @@ class IndexView(View):
         # 如果是认证用户则显示自己的文章，否则显示管理员的文章
         context = cache.get('index_page')
         if not context:
-            if request.user:
-                articles = Article.objects.filter(user=request.user).filter(is_delete=False).order_by('-create_time')[:4]
+            if request.user.is_authenticated:
+                articles = Article.objects.filter(user_id=request.user.id).filter(is_delete=False).order_by('-create_time')
                 # 用户文章数量不够则用管理员的文章补齐4个
                 if len(articles)<4:
                     x = 4 - len(articles)
                     articles1 = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')[:x]
-                articles = chain(articles,articles1)
+                    articles = chain(articles,articles1)
+                else:
+                    articles = articles[:4]
             else:
                 articles = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')[:4]
                 
@@ -47,6 +49,12 @@ class IndexView(View):
             except:
                 content,translation,author = '','',''
 
+            for a in articles:
+                a.content = markdown.markdown(a.content,
+                    extensions=[
+                    'markdown.extensions.extra',
+                    'markdown.extensions.codehilite',
+                    'markdown.extensions.toc'])
 
             context = {
                 'content':content,
@@ -56,12 +64,6 @@ class IndexView(View):
                 'types':types,
                 'activitys':activitys,
             }
-
-            context['content'] = markdown.markdown(context['content'],
-            extensions=[
-            'markdown.extensions.extra',
-            'markdown.extensions.codehilite',
-            'markdown.extensions.toc'])
 
             cache.set('index_page',context,60)
         return render(request, 'index.html', context)
@@ -126,12 +128,30 @@ class ArticleDetail(LoginRequiredMixin,DetailView):
 
 class ArticleCreate(LoginRequiredMixin,CreateView):
     model = Article
-    fields = ['type','user','tag','title','content']
+    fields = ['title','type','tag','content','user']
 
+    # user 设置为当前用户
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        user = self.request.user
+        kwargs.update(
+            {'initial': {'user': user}}  # 给表单的phase字段传递外键实例
+        )
+        return kwargs
 
 class ArticleUpdate(LoginRequiredMixin,UpdateView):
     model = Article
-    fields = ['type','user','tag','title','content']
+    fields = ['title','type','tag','content']
+
+    # 更新的话一般user不用变
+    # def get_form_kwargs(self):
+    #     kwargs = super().get_form_kwargs()
+    #     user = self.request.user
+    #     if user:
+    #         kwargs.update(
+    #             {'initial': {'user': user}}  # 给表单的phase字段传递外键实例
+    #         )
+    #     return kwargs
 
 class ArticleDelete(LoginRequiredMixin,DeleteView):
     model = Article

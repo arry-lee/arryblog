@@ -1,0 +1,33 @@
+{% extends 'user/base.html' %}
+{% load staticfiles %}
+{% block title %}阿锐博客-登录{% endblock title %}
+
+
+{% block middle %}
+
+<p>If you are</p>
+<p>A Real Romantic Youth!</p>
+<p>Welcome to Arryblog!</p>
+
+<form class="form-horizontal" method="post">
+	{% csrf_token %}
+	<div class="control-group">
+		 <label class="control-label" for="inputEmail">用户名</label>
+		<div class="controls">
+			<input id="inputEmail" name="username" type="text" value="{{ username }}" />
+		</div>
+	</div>
+	<div class="control-group">
+		 <label class="control-label" for="inputPassword">密码</label>
+		<div class="controls">
+			<input id="inputPassword" type="password" name="pwd"/>
+		</div>
+	</div>
+	<div class="control-group">
+		<div class="controls">
+			 <label class="checkbox"><input type="checkbox" name="remember" {{ checked }}/>记住我</label> <button type="submit" class="btn">登陆</button>
+		</div>
+	</div>
+</form>
+{{ errmsg }}
+{% endblock middle %}

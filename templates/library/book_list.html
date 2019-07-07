@@ -1,15 +1,42 @@
 {% extends "library/base.html" %}
 {% load url from future %}
 
-{% block content %}
-<table>
-{% for book in object_list %}
-<tr>
-<td><a href="{% url 'library:book_detail' pk=book.pk %}">{{ book.title }}</a></td>
-<td>{{ book.sortkey }}</td>
-<td><a href="{% url 'library:year_detail' year=book.year_published|date:"Y" %}">{{ book.year_published|date:"Y" }}</a></td>
-
-</tr>
-{% endfor %}
+{% block middle %}
+<h2>书籍列表</h2>
+<table class="table table-striped table-hover">
+	<thead>
+		<tr>
+			<th>
+				编号
+			</th>
+			<th>
+				书名
+			</th>
+			<th>
+				作者
+			</th>
+			<th>
+				出版日期
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for book in object_list %}
+		<tr class="info">
+			<td>
+				{{ book.id }}
+			</td>
+			<td>
+				<a href="{% url 'library:book_detail' pk=book.pk %}">{{ book.title }}
+			</td>
+			<td>
+				佚名
+			</td>
+			<td>
+				<a href="{% url 'library:year_detail' year=book.year_published|date:"Y" %}">{{ book.year_published|date:"Y" }}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
 </table>
-{% endblock content %}
+{% endblock middle %}

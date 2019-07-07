@@ -1,8 +1,5 @@
-{% extends 'index_base.html' %}
-{% block container %}
-<div class="col-md-2 column"></div>
-
-<div class="col-md-8 column">
+{% extends 'article/article_base.html' %}
+{% block middle %}
 	<div class="page-header">
 	  <h1>{{article.title}}</h1>
 	</div>
@@ -13,10 +10,6 @@
     <span class="pinned-item-meta py" style="background-color: {{article.tag.color}}"></span>
     {{article.tag}}
 	</p>
-
-
 	{{article.content|safe}}
+{% endblock middle %}
 
-</div>
-<div class="col-md-2 column"></div>
-{% endblock container %}

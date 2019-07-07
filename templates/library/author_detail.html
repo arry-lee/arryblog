@@ -1,7 +1,7 @@
 {% extends "library/base.html" %}
 {% load url from future %}
 
-{% block content %}
+{% block middle %}
 
 <h2>{{ object.name }}</h2>
 <p>{% for book in object.book_set.all %}
@@ -10,4 +10,4 @@
 <p>{{ book.year_published|date:"Y" }}</p>
 <p>{{ book.location }}</p>
 {% endfor %}
-{% endblock content %}
+{% endblock middle %}

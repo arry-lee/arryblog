@@ -1,8 +1,8 @@
-{% extends 'index_base.html' %}
-{% block container %}
+{% extends 'article/article_base.html' %}
+{% block middle %}
 <form method="post">
 	{% csrf_token %}
 	<p>确定要删除 "{{ object }}"?</p>
 	<input type="submit" value="Confirm" />
 </form>
-{% endblock container %}
+{% endblock middle %}

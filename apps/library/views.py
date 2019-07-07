@@ -7,6 +7,7 @@ from .models import Book, Author
 
 class BookListView(ListView):
     model = Book
+    queryset = Book.objects.all().order_by('id')
 
 class YearListView(ListView):
     queryset = Book.objects.order_by('year_published')

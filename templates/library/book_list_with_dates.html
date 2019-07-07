@@ -1,7 +1,7 @@
 {% extends "library/base.html" %}
 {% load url from future %}
 
-{% block content %}
+{% block middle %}
 <table>
 {% for book in object_list %}
 <tr>
@@ -13,4 +13,4 @@
 </tr>
 {% endfor %}
 </table>
-{% endblock content %}
+{% endblock middle %}
