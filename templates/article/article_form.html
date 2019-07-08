@@ -1,5 +1,8 @@
-{% extends 'article/article_base.html' %}
-{% block middle %}
+{% extends 'index_base.html' %}
+{% block container %}
+<div class="col-md-1">
+</div>
+<div class="col-md-10 col-sm-12">
 <form action="{% url 'article:article-add'%}" method="post">
 	{% csrf_token %}
 
@@ -7,10 +10,31 @@
 	{{hidden}}
 	{% endfor %}
 
-	{{ form.media }}
-	
-    {{ form.as_p }}
+	<fieldset>
+	<label>标题</label>
+	{{ form.title }}
+	</fieldset>
 
-	<input type="submit" value="保存" />
+	<fieldset>
+	<label>标签</label>
+	{{ form.tag }}
+	</fieldset>
+
+	<fieldset>
+	<label>类别</label>
+	{{ form.type }}
+	</fieldset>
+
+	<fieldset>
+	{{ form.media }}
+	{{ form.content }}
+	</fieldset>
+
+    {{ form.user.as_hidden }}
+	<input class="btn btn-default btn-normal" type="submit" value="保存" />
+	<!-- <a class="btn btn-default btn-normal" type="button" href="#">保存草稿</a> -->
 </form>
-{% endblock middle %}
+</div>
+<div class="col-md-1">
+</div>
+{% endblock container %}

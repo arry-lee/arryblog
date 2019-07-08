@@ -11,8 +11,16 @@
 		<div class="row clearfix">
 			<div class="col-md-3 column">
 				<img alt="140x140" src="{% static 'images/arry460.png' %}" class="img-thumbnail" />
+				{% if user.username %}
+				<p class="username">{{user.username}}</p>
+				{% else %}
 				<p class="username">Arry Lee</p>
+				{% endif %}
+				{% if user.slogon %}
+				<p class="slogon">{{user.slogon}}</p>
+				{% else %}
 				<p class="slogon">A real romantic youth.</p>
+				{% endif %}
 				<p class="location"><span class="glyphicon glyphicon-map-marker"aria-hidden="true"></span>中国 南京</p>
 
 
@@ -35,15 +43,15 @@
 				<div class="tabbable" id="tabs-573644">
 					<ul class="nav nav-tabs" id="nav0">
 						<li class="active">
-							 <a href="#panel-0" data-toggle="tab" id="p0">动态 <span class="Counter">2</span></a>
+							 <a href="#panel-0" data-toggle="tab" id="p0">动态 <span class="Counter">4</span></a>
 						</li>
 						<li>
-							 <a href="#panel-1" data-toggle="tab" id="p1">文章 <span class="Counter">1</span></a>
+							 <a href="#panel-1" data-toggle="tab" id="p1">文章 <span class="Counter">{{article_counter}}</span></a>
 						</li>
 						<li>
-							 <a href="#panel-2" data-toggle="tab" id="p2">项目 <span class="Counter">0</span></a>
+							 <a href="#panel-2" data-toggle="tab" id="p2">项目 <span class="Counter">{{articletype_counter}}</span></a>
 						</li>
-						<li>
+<!-- 						<li>
 							 <a href="#panel-3" data-toggle="tab" id="p3">收藏 <span class="Counter">0</span></a>
 						</li>
 						<li>
@@ -51,7 +59,7 @@
 						</li>
 						<li>
 							 <a href="#panel-5" data-toggle="tab" id="p5">粉丝 <span class="Counter">0</span></a>
-						</li>																				
+						</li>	 -->																			
 					</ul>
 
 					<div class="tab-content">

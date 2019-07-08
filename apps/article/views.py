@@ -1,21 +1,18 @@
-from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
-from django.views.generic import View
-from django.core.cache import cache
-from django.views.generic import TemplateView, ListView, DetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
 # from django.core.paginator import Paginator
-from article.models import Article, ArticleType
-from user.models import User, Activity
-
 # from django_redis import get_redis_connection
+from article.models import Article, ArticleType
+from django.core.cache import cache
+from django.core.urlresolvers import reverse
 from django.http import JsonResponse
-
+from django.shortcuts import render, redirect
+from django.views.generic import View,TemplateView, ListView, DetailView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from itertools import chain
+from user.models import User, Activity
 from utils.mixin import LoginRequiredMixin
 from utils.shanbay import get_quote
 import datetime
 import markdown
-from itertools import chain
 
 # # http://127.0.0.1:8000
 class IndexView(View):
@@ -25,18 +22,18 @@ class IndexView(View):
         # 如果是认证用户则显示自己的文章，否则显示管理员的文章
         context = cache.get('index_page')
         if not context:
-            if request.user.is_authenticated:
+            if request.user.is_authenticated():
                 articles = Article.objects.filter(user_id=request.user.id).filter(is_delete=False).order_by('-create_time')
                 # 用户文章数量不够则用管理员的文章补齐4个
                 if len(articles)<4:
-                    x = 4 - len(articles)
+                    x = 4 - len(new_articles)
                     articles1 = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')[:x]
-                    articles = chain(articles,articles1)
+                    new_articles = chain(articles,articles1)
                 else:
-                    articles = articles[:4]
+                    new_articles = articles[:4]
             else:
-                articles = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')[:4]
-                
+                articles = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')
+                new_articles = articles[:4]
             types = ArticleType.objects.all() 
             # 获取最近一年的活动
             activitys = Activity.objects.filter(user_id=1)[:364]
@@ -60,9 +57,12 @@ class IndexView(View):
                 'content':content,
                 'translation':translation,
                 'author':author,
+                'new_articles':new_articles,
                 'articles':articles,
                 'types':types,
                 'activitys':activitys,
+                'article_counter':len(articles),
+                'articletype_counter':len(types),
             }
 
             cache.set('index_page',context,60)
@@ -84,6 +84,19 @@ class ArticleTypeList(ListView):
     context_object_name = 'article_type_list'
     queryset = ArticleType.objects.filter(is_delete=False)
 
+class ArticleTypeDetail(LoginRequiredMixin,DetailView):
+    """某一类别的详情视图，
+    显示该类别下面的所有文章
+    """
+    model = ArticleType
+    slug_field = 'logo' # slug 参数对应的域 是SingleObjectMixin里面的
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        # 将查询集添加到上下文
+        articles = Article.objects.filter(type=self.object).filter(user=self.request.user)
+        context['articles'] = articles
+        return context
 
 class ArticleTypeCreate(LoginRequiredMixin,CreateView):
     model = ArticleType
@@ -105,7 +118,7 @@ from django.contrib.auth import get_user_model
 class ArticleList(LoginRequiredMixin,ListView):
     # model = Article
     template_name = "article_list.html"
-    context_object_name = 'article_list'
+    context_object_name = 'articles'
 
     def get_queryset(self):
         # 动态构建query_set self.request.user
@@ -135,7 +148,7 @@ class ArticleCreate(LoginRequiredMixin,CreateView):
         kwargs = super().get_form_kwargs()
         user = self.request.user
         kwargs.update(
-            {'initial': {'user': user}}  # 给表单的phase字段传递外键实例
+            {'initial': {'user': user}}
         )
         return kwargs
 
@@ -196,16 +209,5 @@ class ClockView(TemplateView):
 
 class ResumeView(TemplateView):
     template_name = "user/resume.html"
-
-
-from django.shortcuts import render
- 
-def cv_view(request):
-    # View code here...
-    return render(request, 'user/resume.pdf',content_type='application/pdf')
-
-
-
-
 
 

@@ -3,7 +3,7 @@
 {% block panel-0 %}
 	<h4 class="text-normal">最新动态</h4>
 	<div class="row clearfix">	
-		{% for article in articles %}
+		{% for article in new_articles %}
 		<div class="col-md-6 column">
 			<div class="article">
 				<a class="title" href="article/{{article.id}}" >
@@ -11,11 +11,11 @@
 					{{article.title}}
 					</h2>
 				</a>
-				<div class="article-content">
+<!-- 				<div class="article-content">
 					<p>
 						{{article.content|safe}}
 					</p>
-				</div>
+				</div> -->
 
 				<p>
 			    <span class="pinned-item-meta py" style="background-color: {{article.tag.color}}"></span>
@@ -43,28 +43,21 @@
 		<div class="col-md-10 column">
 			<div class="row clearfix">
 				<div class="col-md-1 column">
-					<ul>
+<!-- 					<ul>
 						<li></li>
 						<li></li>
 						<li></li>
 						<li></li>
-					</ul>
+					</ul> -->
 				</div>
 				<div class="col-md-5 column">
-					<ol>
+					<ul>
+						{% for article in articles %}
 						<li>
-							没有什么新鲜事
+							{{article.title}}
 						</li>
-						<li>
-							Arry 写点什么吧
-						</li>
-						<li>
-							或者去广场看看
-						</li>
-						<li>
-							或许会有所发现
-						</li>
-					</ol>
+						{% endfor %}
+					</ul>
 				</div>
 
 				<div class="col-md-6 column">
@@ -104,7 +97,7 @@
 			<ul>
 				{% for type in types %}
 				<li>
-				<a class="title" href="#" >
+				<a class="title" href="article/{{type.logo}}/" >
 					{{type}}
 				</a>
 				</li>
@@ -114,37 +107,3 @@
 	</div>
 {% endblock panel-2 %}
 
-{% block panel-3 %}
-	<h4 class="text-normal">收藏列表</h4>
-	<div class="row clearfix">	
-		<div class="col-md-12 column article">
-			<ul>
-				{% for article in articles %}
-				<li>
-				<a class="title" href="#" >
-					{{article.tag}}
-				</a>
-				</li>
-				{% endfor %}
-			</ul>
-		</div>
-	</div>
-{% endblock panel-3 %}
-
-{% block panel-4 %}
-	<h4 class="text-normal">关注列表</h4>
-	<div class="row clearfix">	
-		<div class="col-md-12 column article">
-			你还没有关注任何人
-		</div>
-	</div>
-{% endblock panel-4 %}
-
-{% block panel-5 %}
-	<h4 class="text-normal">粉丝列表</h4>
-	<div class="row clearfix">	
-		<div class="col-md-12 column article">
-			你还没有任何粉丝
-		</div>
-	</div>
-{% endblock panel-5 %}

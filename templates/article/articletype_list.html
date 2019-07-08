@@ -22,7 +22,7 @@
 		{% for article_type in article_type_list %}
 		<tr class="info">
 			<td>
-				{{ article_type.id }}
+				{{ forloop.counter }}
 			</td>
 			<td>
 				{{ article_type.name }}

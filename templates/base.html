@@ -69,9 +69,9 @@
 					<li>
 						 <a href="/photo">光影</a>
 					</li>
-					<li>
+<!-- 					<li>
 						 <a href="/bookshell">书架</a>
-					</li>
+					</li> -->
 <!-- 					<li>
 						 <a href="/music">题库</a>
 					</li>
@@ -116,16 +116,18 @@
 								{% if user.username %}
 								<a href="#">以 {{user.username}} 的身份登录</a>
 								{% else %}
-								<a href="#">以 访客 的身份登录</a>
+								<a href="#">当前以 访客 的身份浏览</a>
 								<a href="/user/login">登录</a>
+								<a href="/user/register">注册</a>
 								{% endif %}
 							</li>
+							
+							{% if user.username %}
 							<li class="divider">
 							</li>
 							<li>
 								 <a href="#">^_^ 修改状态</a>
 							</li>
-
 							<li class="divider">
 							</li>								
 							<li>
@@ -152,10 +154,9 @@
 								 <a href="/user/setting">设置</a>
 							</li>						
 							<li>
-								{% if user.username %}
 								 <a href="/user/logout">退出</a>
-								{% endif%}
-							</li>										
+							</li>
+							{% endif%}									
 						</ul>
 					</li>
 				</ul>
