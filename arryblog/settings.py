@@ -201,4 +201,3 @@ HAYSTACK_SIGNAL_PROCESSOR ='haystack.signals.RealtimeSignalProcessor'
 
 # 指定搜索结果每页显示条数
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
-

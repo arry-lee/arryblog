@@ -1,6 +1,6 @@
 from django.conf.urls import url
-from article.views import (IndexView, JsonDate, 
-	AboutView,MusicView,ClockView,
+from article.views import (IndexView, JsonDate,
+	AboutView,MusicView,ClockView,ResumeView,
 	ArticleTypeList,ArticleTypeCreate, ArticleTypeUpdate,ArticleTypeDelete,
 	ArticleDetail,ArticleList,ArticleCreate, ArticleUpdate, ArticleDelete,
 	ArticleYearArchiveView,ArticleMonthArchiveView,ArticleDayArchiveView)
@@ -9,7 +9,7 @@ from article.views import (IndexView, JsonDate,
 urlpatterns = [
 	url(r'^js',JsonDate.as_view()),
 	url(r'^about/$', AboutView.as_view(), name='about'), # 编辑文章页
-	url(r'^list/$',ArticleList.as_view()),
+	url(r'^resume/$',ResumeView.as_view(),name='resume'),
 	url(r'^music/$', MusicView.as_view(), name='about'), 
 	url(r'^clock/$', ClockView.as_view(), name='clock'), 
 

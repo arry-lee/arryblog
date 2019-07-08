@@ -88,7 +88,7 @@ class ArticleTypeList(ListView):
 class ArticleTypeCreate(LoginRequiredMixin,CreateView):
     model = ArticleType
     fields = ['name','logo']
-
+    success_url = '/article/atypes/'
 
 class ArticleTypeUpdate(LoginRequiredMixin,UpdateView):
     model = ArticleType
@@ -194,10 +194,15 @@ class MusicView(TemplateView):
 class ClockView(TemplateView):
     template_name = "clock.html"
 
+class ResumeView(TemplateView):
+    template_name = "user/resume.html"
 
 
-
-
+from django.shortcuts import render
+ 
+def cv_view(request):
+    # View code here...
+    return render(request, 'user/resume.pdf',content_type='application/pdf')
 
 
 
