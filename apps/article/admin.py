@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.core.cache import cache
 # Register your models here.
-from article.models import Article, Tag, Comment, ArticleType
+from article.models import Article, Tag, Comment, ArticleType,Quote
 
 
 class BaseModelAdmin(admin.ModelAdmin):
@@ -39,7 +39,12 @@ class TagAdmin(BaseModelAdmin):
 class CommentAdmin(BaseModelAdmin):
 	pass
 
+class QuoteAdmin(BaseModelAdmin):
+	pass
+
 admin.site.register(ArticleType,ArticleTypeAdmin)
 admin.site.register(Article,ArticleAdmin)
 admin.site.register(Tag,TagAdmin)
 admin.site.register(Comment,CommentAdmin)
+admin.site.register(Quote,QuoteAdmin)
+

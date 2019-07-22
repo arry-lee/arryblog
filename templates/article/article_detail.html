@@ -1,12 +1,12 @@
 {% extends 'article/article_base.html' %}
 {% block middle %}
 	<div class="page-header">
-	  <h1>{{article.title}}</h1>
+	  <h1>{{article.title}} </h1>
 	</div>
 
-	<p>{{article.user}}</p>
+	<p class="text-right"><small >@{{article.user}}</small></p>
 
-	<p>
+	<p class="text-right">
     <span class="pinned-item-meta py" style="background-color: {{article.tag.color}}"></span>
     {{article.tag}}
 	</p>

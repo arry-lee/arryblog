@@ -80,8 +80,9 @@ class Comment(BaseModel):
         verbose_name = "评论"
         verbose_name_plural = verbose_name
 
-class Quote(object):
+class Quote(models.Model):
     """每日一句"""
+    date = models.DateField()
     quote = models.CharField(max_length=200, verbose_name='名言')
     translation = models.CharField(max_length=200, verbose_name='翻译')
     source = models.CharField(max_length=20, verbose_name='出处')
@@ -91,5 +92,12 @@ class Quote(object):
         verbose_name = '每日一句'
         verbose_name_plural = verbose_name
 
+    # @classmethod
+    # def create(cls, quote,translation,source):
+    #     book = cls(quote=content,translation=translation,source=source)
+    #     book.save()
+    #     # do something with the book
+    #     return book
+
     def __str__(self):
-        return self.quot
+        return self.quote

@@ -1,6 +1,6 @@
 # from django.core.paginator import Paginator
 # from django_redis import get_redis_connection
-from article.models import Article, ArticleType
+from article.models import Article, ArticleType, Quote
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
@@ -13,15 +13,19 @@ from utils.mixin import LoginRequiredMixin
 from utils.shanbay import get_quote
 import datetime
 import markdown
-
+from django.core.paginator import Paginator
 # # http://127.0.0.1:8000
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+
 class IndexView(View):
     '''首页'''
+    @method_decorator(cache_page(60 * 15))
     def get(self, request):
         '''显示首页'''
         # 如果是认证用户则显示自己的文章，否则显示管理员的文章
-        context = cache.get('index_page')
-        if not context:
+        # context = cache.get('index_page')
+        if True:
             if request.user.is_authenticated():
                 articles = Article.objects.filter(user_id=request.user.id).filter(is_delete=False).order_by('-create_time')
                 # 用户文章数量不够则用管理员的文章补齐4个
@@ -39,12 +43,14 @@ class IndexView(View):
             activitys = Activity.objects.filter(user_id=1)[:364]
             # 获取每日一句
 
-
+            today = datetime.datetime.today()
             try:
-                date = datetime.datetime.today().strftime('%Y-%m-%d')
-                content,translation,author = get_quote(date=date)
+                quote = Quote.objects.get(date=today)
             except:
-                content,translation,author = '','',''
+                date = today.strftime('%Y-%m-%d')
+                content,translation,author = get_quote(date=date)
+                quote = Quote.objects.create(date=today,quote=content,translation=translation,source=author)
+                quote.save()
 
             for a in articles:
                 a.content = markdown.markdown(a.content,
@@ -53,19 +59,50 @@ class IndexView(View):
                     'markdown.extensions.codehilite',
                     'markdown.extensions.toc'])
 
+            # 分页器，若是首页则激活动态这个panel,
+            # 要是有 page 参数则是文章选项卡
+            paginator = Paginator(articles,6)
+
+            page = request.GET.get('page')
+            if page is None:
+                isindex = True
+                page = 1
+            else:
+                isindex = False
+
+            articles = paginator.page(page)
+
+            page = int(page)
+            # 显示前后5页
+            a = paginator.num_pages
+            if a <= 5:
+                start = 1
+                end = a
+            else:
+                if page < 5:
+                    start = 1
+                    end = 5
+                elif page > a-5:
+                    start = a-4
+                    end = a
+                else:
+                    start = page-2
+                    end = page+2
+            page_list = list(range(start,end+1))
+            
             context = {
-                'content':content,
-                'translation':translation,
-                'author':author,
+                'quote':quote,
                 'new_articles':new_articles,
                 'articles':articles,
+                'isindex':isindex,
                 'types':types,
                 'activitys':activitys,
                 'article_counter':len(articles),
                 'articletype_counter':len(types),
+                'page_list':page_list,
             }
 
-            cache.set('index_page',context,60)
+            # cache.set('index_page',context,60)
         return render(request, 'index.html', context)
 
 
@@ -84,7 +121,8 @@ class ArticleTypeList(ListView):
     context_object_name = 'article_type_list'
     queryset = ArticleType.objects.filter(is_delete=False)
 
-class ArticleTypeDetail(LoginRequiredMixin,DetailView):
+# class ArticleTypeDetail(LoginRequiredMixin,DetailView):
+class ArticleTypeDetail(DetailView):
     """某一类别的详情视图，
     显示该类别下面的所有文章
     """
@@ -115,7 +153,8 @@ class ArticleTypeDelete(LoginRequiredMixin,DeleteView):
 from django.contrib.auth import get_user_model
 
 # Article 相关视图
-class ArticleList(LoginRequiredMixin,ListView):
+# class ArticleList(LoginRequiredMixin,ListView):
+class ArticleList(ListView):
     # model = Article
     template_name = "article_list.html"
     context_object_name = 'articles'
@@ -124,7 +163,7 @@ class ArticleList(LoginRequiredMixin,ListView):
         # 动态构建query_set self.request.user
         return Article.objects.filter(user = self.request.user)
 
-class ArticleDetail(LoginRequiredMixin,DetailView):
+class ArticleDetail(DetailView):
     model = Article
     # template_name = "article_detail.html" #加上就会找不到
     context_object_name = 'article'
@@ -173,8 +212,8 @@ class ArticleDelete(LoginRequiredMixin,DeleteView):
 
 from django.views.generic.dates import YearArchiveView, MonthArchiveView, DayArchiveView
 
-
-class ArticleYearArchiveView(LoginRequiredMixin,YearArchiveView):
+# class ArticleYearArchiveView(LoginRequiredMixin,YearArchiveView):
+class ArticleYearArchiveView(YearArchiveView):
     queryset = Article.objects.all()
     date_field = "create_time"
     make_object_list = True
@@ -182,15 +221,16 @@ class ArticleYearArchiveView(LoginRequiredMixin,YearArchiveView):
     allow_empty = True
 
 
-class ArticleMonthArchiveView(LoginRequiredMixin,MonthArchiveView):
+# class ArticleMonthArchiveView(LoginRequiredMixin,MonthArchiveView):
+class ArticleMonthArchiveView(MonthArchiveView):
     queryset = Article.objects.all()
     date_field = "create_time"
     make_object_list = True
     allow_future = True
     allow_empty = True
 
-
-class ArticleDayArchiveView(LoginRequiredMixin,DayArchiveView):
+# class ArticleDayArchiveView(LoginRequiredMixin,DayArchiveView):
+class ArticleDayArchiveView(DayArchiveView):
     queryset = Article.objects.all()
     date_field = "create_time"
     allow_future = True

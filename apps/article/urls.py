@@ -9,9 +9,9 @@ from article.views import (AboutView, ArticleCreate,
 urlpatterns = [
 	url(r'^$', IndexView.as_view(), name='index'), # 首页
 	url(r'^about/$', AboutView.as_view(), name='about'), # 编辑文章页
-	url(r'^archive/(?P<year>\d{4})/',ArticleYearArchiveView.as_view(),name="article_year_archive"),
+	url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/',ArticleDayArchiveView.as_view(month_format='%m'),name="article_day_archive"),
 	url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/',ArticleMonthArchiveView.as_view(month_format='%m'),name="article_month_archive"),	
-	url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/',ArticleDayArchiveView.as_view(month_format='%m'),name="article_day_archive"),	
+	url(r'^archive/(?P<year>\d{4})/',ArticleYearArchiveView.as_view(),name="article_year_archive"),
 	url(r'^article/(?P<pk>\d+)/$', ArticleDetail.as_view(), name='article-detail'),
 	url(r'^article/(?P<pk>\d+)/delete/$', ArticleDelete.as_view(), name='article-delete'),
 	url(r'^article/(?P<pk>\d+)/update/$', ArticleUpdate.as_view(), name='article-update'),

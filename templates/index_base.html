@@ -29,23 +29,24 @@
 				<div class="quote" style="padding-top:60px;">
 					<blockquote>
 						<p>
-							{{content}}
+							{{quote.quote}}
 						</p> 
 						<p>
-							{{translation}}
+							{{quote.translation}}
 						</p>
-						<small><cite>{{author}}</cite></small>
+						<small><cite>{{quote.source}}</cite></small>
 					</blockquote>
+
 				</div>
 
 			</div>
 			<div class="col-md-9 column">
 				<div class="tabbable" id="tabs-573644">
 					<ul class="nav nav-tabs" id="nav0">
-						<li class="active">
+						<li class="{% if isindex %}active{% endif %}">
 							 <a href="#panel-0" data-toggle="tab" id="p0">动态 <span class="Counter">4</span></a>
 						</li>
-						<li>
+						<li class="{% if not isindex %}active{% endif %}">
 							 <a href="#panel-1" data-toggle="tab" id="p1">文章 <span class="Counter">{{article_counter}}</span></a>
 						</li>
 						<li>
@@ -63,11 +64,11 @@
 					</ul>
 
 					<div class="tab-content">
-						<div class="tab-pane active" id="panel-0">
+						<div class="tab-pane {% if isindex %}active{% endif %}" id="panel-0">
 							{% block panel-0 %}
 							{% endblock panel-0%}
 						</div>
-						<div class="tab-pane" id="panel-1">
+						<div class="tab-pane {% if not isindex %}active{% endif %}" id="panel-1">
 							{% block panel-1 %}
 							{% endblock panel-1%}
 						</div>	

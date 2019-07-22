@@ -147,22 +147,22 @@ EMAIL_FROM = '阿锐<arry_lee@qq.com>'
 
 
 # Django 的缓存配置
-CACHES = {
-    "default":{
-        "BACKEND":"django_redis.cache.RedisCache",
-        "LOCATION":"redis://127.0.0.1:6379/9",
-        "OPTIONS":{
-            "CLIENT_CLASS":"django_redis.client.DefaultClient"
-        }
-    }
-}
-
-# 缓存设置，开发环境用dummycache，就是实现了接口的假缓存
 # CACHES = {
-#     'default':{
-#         'BACKEND':'django.core.cache.backends.dummy.DummyCache',
+#     "default":{
+#         "BACKEND":"django_redis.cache.RedisCache",
+#         "LOCATION":"redis://127.0.0.1:6379/9",
+#         "OPTIONS":{
+#             "CLIENT_CLASS":"django_redis.client.DefaultClient"
+#         }
 #     }
 # }
+
+# 缓存设置，开发环境用dummycache，就是实现了接口的假缓存
+CACHES = {
+    'default':{
+        'BACKEND':'django.core.cache.backends.dummy.DummyCache',
+    }
+}
 
 # session配进缓存里面
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"

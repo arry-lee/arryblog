@@ -7,20 +7,25 @@
 		<div class="col-md-6 column">
 			<div class="article">
 				<a class="title" href="article/{{article.id}}" >
-					<h2>
+					<h4>
 					{{article.title}}
-					</h2>
+					</h4>
 				</a>
-<!-- 				<div class="article-content">
+				<div class="article-content">
 					<p>
-						{{article.content|safe}}
+						{{article.content|striptags|linebreaksbr|cut:'#'}}
 					</p>
-				</div> -->
+				</div>
 
 				<p>
 			    <span class="pinned-item-meta py" style="background-color: {{article.tag.color}}"></span>
 			    {{article.tag}}
 				</p>
+			
+			<div style="text-align:right;font-size:12px;color:#666">
+				<i>本文由 {{article.user}} 创建于 {{article.create_time}}
+				<a href="article/{{article.id}}"> 更多&gt;&gt;&gt;</a></i>
+			</div>
 			</div>
 		</div>
 		{% endfor %}
@@ -43,16 +48,10 @@
 		<div class="col-md-10 column">
 			<div class="row clearfix">
 				<div class="col-md-1 column">
-<!-- 					<ul>
-						<li></li>
-						<li></li>
-						<li></li>
-						<li></li>
-					</ul> -->
 				</div>
 				<div class="col-md-5 column">
 					<ul>
-						{% for article in articles %}
+						{% for article in articles|slice:':4' %}
 						<li>
 							{{article.title}}
 						</li>
@@ -86,6 +85,36 @@
 				</li>
 				{% endfor %}
 			</ul>
+		
+			<nav aria-label="Page navigation example">
+			    <ul class="pagination pagination-sm">
+
+			        {% if articles.has_previous %}
+			            <li class="page-item"><a href="?page=1">首页</a></li>
+			            <li class="page-item"><a href="?page={{ articles.previous_page_number }}">&laquo;</a></li>
+			        {% else %}
+			            <li class="page-item disabled"><span class="page-link">首页</span></li>
+			            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>			        
+			        {% endif %}
+     				
+     				{% for p in page_list %}
+     					{% if p == articles.number %}
+     						<li class="page-item active"><span class="page-link">{{p}}</span></li>
+     					{% else %}
+			       			<li class="page-item "><a href="?page={{p}}">{{p}}</a></li>
+			       		{% endif %}
+			  		{% endfor %}
+
+			        {% if articles.has_next %}
+			            <li class="page-item"><a href="?page={{ articles.next_page_number }}"> &raquo;</a></li>
+			            <li class="page-item"><a href="?page={{ articles.paginator.num_pages }}">尾页</a></li>
+			        {% else %}
+			    		<li class="page-item disabled"><span class="page-link"> &raquo;</span></li>
+			            <li class="page-item disabled"><span class="page-link">尾页</span></li>
+			        {% endif %}
+			    </ul>
+			</nav>
+
 		</div>
 	</div>
 {% endblock panel-1 %}

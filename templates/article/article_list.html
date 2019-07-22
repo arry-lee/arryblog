@@ -1,5 +1,17 @@
 {% extends 'article/article_base.html' %}
 {% block middle %}
+
+<ul class="breadcrumb">
+				<li>
+					<a href="/">主页</a>
+				</li>
+				<li>
+					<a href="/">类目</a>
+				</li>
+				<li class="active">
+					主题
+				</li>
+			</ul>
 <h2> 文章列表 </h2>
 <table class="table table-striped table-hover">
 	<thead>
@@ -23,7 +35,7 @@
 	</thead>
 	<tbody>
 		{% for article in articles %}
-		<tr class="info">
+		<tr class="{% cycle 'info' 'none'%}">
 			<td>
 				{{ forloop.counter }}
 			</td>
