@@ -28,7 +28,7 @@
 				<a href="{% url 'article:article-detail' pk=article.pk %}">{{ article.title }}
 			</td>
 			<td>
-				{{ article.tag}}
+				{% for t in article.tags.all %} {{t.name}}{% endfor %}
 			</td>
 			<td>
 				{{ article.create_time}}

@@ -5,10 +5,11 @@
 	</div>
 
 	<p class="text-right"><small >@{{article.user}}</small></p>
-
+	
 	<p class="text-right">
-    <span class="pinned-item-meta py" style="background-color: {{article.tag.color}}"></span>
-    {{article.tag}}
+	{% for tag in article.tags.all %}
+ 	<span class="label" style="background-color:{{tag.color}}">{{tag.name}}</span>
+ 	{% endfor %}
 	</p>
 	{{article.content|safe}}
 {% endblock middle %}

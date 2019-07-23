@@ -87,20 +87,35 @@ a {
 	background-color: #3572a5;
 }
 
-.contrib-day {
-	width: 12px;
-	height: 12px;
+.contrib-week {
+    width: 4%;
+    height: 15px;
     display: inline-block;
-    margin-left: -3px; 
+    margin: -2px;
+    /*margin-top: 0px; */
     border: 1px solid #fff;
-    background-color: rgb(235, 237, 240);
+    /*padding: 1px;*/
+}
+
+.contrib-day {
+	width: 1.8%;
+	height: 15px;
+    display: inline-block;
+    margin: -2px;
+    /*margin-top: 0px; */
+    border: 1px solid #fff;
+    /*padding: 1px;*/
 }
 
 .js-year-contribution{
 	line-height: 10px;
 	margin: 10px;
 	border: 1px solid rgb(209, 213, 218);
-	padding: 20px 50px;
+	padding-left: 20px;
+    padding-bottom: 20px;
+    padding-top: 25px;
+
+
 }
 
 .weekday {

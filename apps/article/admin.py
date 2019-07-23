@@ -29,7 +29,7 @@ class ArticleTypeAdmin(BaseModelAdmin):
 	pass
 
 class ArticleAdmin(BaseModelAdmin):
-	list_display = ('title', 'tag', 'type','create_time')
+	list_display = ('title', 'type','create_time')
 	list_filter = ['create_time']
 	search_fields = ['title']
 	

@@ -17,12 +17,14 @@
 					</p>
 				</div>
 
-				<p>
-			    <span class="pinned-item-meta py" style="background-color: {{article.tag.color}}"></span>
-			    {{article.tag}}
+				<p class="text-right">
+				
+				{% for tag in article.tags.all %}
+			 	<span class="label" style="background-color: {{tag.color}};">{{tag.name}}</span>
+			 	{% endfor %}
 				</p>
 			
-			<div style="text-align:right;font-size:12px;color:#666">
+			<div class="text-right"style="font-size:12px;color:gray">
 				<i>本文由 {{article.user}} 创建于 {{article.create_time}}
 				<a href="article/{{article.id}}"> 更多&gt;&gt;&gt;</a></i>
 			</div>
@@ -34,13 +36,56 @@
 	<h4 class="text-normal">近一年的贡献</h4>
 	<div class="row clearfix">
 		<div class="js-year-contribution">
-			{% for activity in activitys reversed%}
-			{% if forloop.counter0|divisibleby:52 %}
+			<span class="contrib-week"><small>Mon</small></span>
+			{% for activity in activitys|slice:'0:365:7'%}
+			<span class='contrib-day' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}" style="background-color: {{activity.activity_level}};">
+				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+			</span>
+			{% endfor %}
 			<br>
-			{% endif %}
-			<span class='contrib-day' date='{{activity.activity_date}}' style="background-color: {{activity.activity_level}}"></span>
+			<span class="contrib-week"><small>Tue</small></span>
+			{% for activity in activitys|slice:'1:365:7'%}
+			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
+				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+			</span>
+			{% endfor %}
+			<br>
+			<span class="contrib-week"><small>Wed</small></span>
+			{% for activity in activitys|slice:'2:365:7'%}
+			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
+				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+			</span>
+			{% endfor %}
+			<br>
+			<span class="contrib-week"><small>Thu</small></span>
+			{% for activity in activitys|slice:'3:365:7'%}
+			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
+				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+			</span>
+			{% endfor %}
+			<br>
+			<span class="contrib-week"><small>Fri</small></span>
+			{% for activity in activitys|slice:'4:365:7'%}
+			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
+				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+			</span>
+			{% endfor %}
+			<br>
+			<span class="contrib-week"><small>Sat</small></span>
+			{% for activity in activitys|slice:'5:365:7'%}
+			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
+				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+			</span>
+			{% endfor %}
+			<br>
+			<span class="contrib-week"><small>Sun</small></span>
+			{% for activity in activitys|slice:'6:365:7'%}
+			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
+				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+			</span>
 			{% endfor %}
 		</div>
+
 	</div>
 
 	<h4 class="text-normal">最近活动</h4>
@@ -50,7 +95,7 @@
 				<div class="col-md-1 column">
 				</div>
 				<div class="col-md-5 column">
-					<ul>
+					<ul class="list-unstyled">
 						{% for article in articles|slice:':4' %}
 						<li>
 							{{article.title}}

@@ -20,7 +20,7 @@ from django.utils.decorators import method_decorator
 
 class IndexView(View):
     '''首页'''
-    @method_decorator(cache_page(60 * 15))
+    # @method_decorator(cache_page(60 * 15))
     def get(self, request):
         '''显示首页'''
         # 如果是认证用户则显示自己的文章，否则显示管理员的文章
@@ -89,7 +89,10 @@ class IndexView(View):
                     start = page-2
                     end = page+2
             page_list = list(range(start,end+1))
-            
+
+            # 统计新增文章数量
+            article_counter = Article.objects.filter(create_time__gt = today).count()
+            articletype_counter = ArticleType.objects.filter(create_time__gt = today).count()
             context = {
                 'quote':quote,
                 'new_articles':new_articles,
@@ -97,8 +100,8 @@ class IndexView(View):
                 'isindex':isindex,
                 'types':types,
                 'activitys':activitys,
-                'article_counter':len(articles),
-                'articletype_counter':len(types),
+                'article_counter':article_counter,
+                'articletype_counter':articletype_counter,
                 'page_list':page_list,
             }
 

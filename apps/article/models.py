@@ -42,7 +42,7 @@ class Article(BaseModel):
 
     type = models.ForeignKey('ArticleType', verbose_name='文章类型')
     user = models.ForeignKey('user.User', verbose_name='作者')
-    tag = models.ForeignKey('Tag', verbose_name='标签')
+    tags = models.ManyToManyField('Tag', verbose_name='标签集')
     title = models.CharField(max_length=40, verbose_name='文章标题')
     content = MDTextField(blank=True, verbose_name='文章内容')
     view = models.IntegerField(default=1, verbose_name='访问量')

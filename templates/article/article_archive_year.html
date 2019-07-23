@@ -46,7 +46,7 @@
 				{{ article.type}}
 			</td>
 			<td>
-				{{ article.tag}}
+				{% for t in article.tags.all %} {{t.name}}{% endfor %}
 			</td>
 			<td>
 				{{ article.create_time|date:"F j, Y"}}
