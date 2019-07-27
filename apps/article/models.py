@@ -85,7 +85,7 @@ class Quote(models.Model):
     date = models.DateField()
     quote = models.CharField(max_length=200, verbose_name='名言')
     translation = models.CharField(max_length=200, verbose_name='翻译')
-    source = models.CharField(max_length=20, verbose_name='出处')
+    source = models.CharField(max_length=200, verbose_name='出处')
 
     class Meta:
         db_table = 'df_quote'

@@ -3,7 +3,7 @@
 from article.models import Article, ArticleType, Quote
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import View,TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -18,6 +18,27 @@ from django.core.paginator import Paginator
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
+import calendar
+import datetime
+
+
+from . import tasks
+
+def test(request):
+    tasks.test.delay()
+    return HttpResponse('hello world')
+
+
+def get_last_monday(today):
+    '''获取前一个周一'''
+    oneday = datetime.timedelta(days = 1)
+    m1 = calendar.MONDAY
+    while today.weekday() != m1:
+        today -= oneday
+    last_monday = today
+    return last_monday
+
+
 class IndexView(View):
     '''首页'''
     # @method_decorator(cache_page(60 * 15))
@@ -30,7 +51,7 @@ class IndexView(View):
                 articles = Article.objects.filter(user_id=request.user.id).filter(is_delete=False).order_by('-create_time')
                 # 用户文章数量不够则用管理员的文章补齐4个
                 if len(articles)<4:
-                    x = 4 - len(new_articles)
+                    x = 4 - len(articles)
                     articles1 = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')[:x]
                     new_articles = chain(articles,articles1)
                 else:
@@ -38,19 +59,35 @@ class IndexView(View):
             else:
                 articles = Article.objects.filter(user_id=1).filter(is_delete=False).order_by('-create_time')
                 new_articles = articles[:4]
-            types = ArticleType.objects.all() 
-            # 获取最近一年的活动
-            activitys = Activity.objects.filter(user_id=1)[:364]
-            # 获取每日一句
+            types = ArticleType.objects.all()
 
             today = datetime.datetime.today()
-            try:
-                quote = Quote.objects.get(date=today)
-            except:
-                date = today.strftime('%Y-%m-%d')
-                content,translation,author = get_quote(date=date)
-                quote = Quote.objects.create(date=today,quote=content,translation=translation,source=author)
-                quote.save()
+            # 获取最近一年的活动
+            # user = request.user  
+            
+            activitys = cache.get('activitys')
+            if not activitys:
+                last_year = today - datetime.timedelta(days=359)#365-6
+                last_year = get_last_monday(last_year)
+                try:
+                    a = Activity.objects.get(user=user,activity_date=today)
+                except:
+                    Activity.fake_activity(days=1)
+                finally:
+                    tomorrow = today + datetime.timedelta(days=1)
+                    activitys = Activity.objects.filter(user=1,activity_date__range=(last_year,tomorrow)).order_by('activity_date')
+                    cache.set('activitys',activitys,60*60*24)
+            # 获取每日一句
+            quote = cache.get('quote')
+            if not quote:
+                try:
+                    quote = Quote.objects.get(date=today)
+                except:
+                    date = today.strftime('%Y-%m-%d')
+                    content,translation,author = get_quote(date=date)
+                    quote = Quote.objects.create(date=today,quote=content,translation=translation,source=author)
+                    quote.save()
+                cache.set('quote',quote,60*60*24)
 
             for a in articles:
                 a.content = markdown.markdown(a.content,
@@ -183,7 +220,7 @@ class ArticleDetail(DetailView):
 
 class ArticleCreate(LoginRequiredMixin,CreateView):
     model = Article
-    fields = ['title','type','tag','content','user']
+    fields = ['title','type','tags','content','user']
 
     # user 设置为当前用户
     def get_form_kwargs(self):
@@ -196,7 +233,7 @@ class ArticleCreate(LoginRequiredMixin,CreateView):
 
 class ArticleUpdate(LoginRequiredMixin,UpdateView):
     model = Article
-    fields = ['title','type','tag','content']
+    fields = ['title','type','tags','content']
 
     # 更新的话一般user不用变
     # def get_form_kwargs(self):

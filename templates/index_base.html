@@ -1,17 +1,23 @@
 {% extends 'base.html' %}
-
+{% load cache %}
 {% load staticfiles %}
-
+{% load user_tags %}
 {% block title %}阿锐的博客-首页{% endblock title %}
-
 
 
 {% block container %}
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-2 column">
-				<img alt="140x140" src="{% static 'images/arry460.png' %}" class="img-thumbnail" />
-				{% if user.username %}
+				
+				{% cache 500 gravatar%}
+				{{user.email|gravatar:460}}
+				{% endcache %}
+				<!-- {{ user.email|gravatar:460}} -->
+				<!-- <img alt="140x140" src="{% static 'images/arry460.png' %}" class="img-thumbnail" /> -->
+				{% if user.nickname %}
+				<p class="username">{{user.nickname}}</p>
+				{% elif user.username%}
 				<p class="username">{{user.username}}</p>
 				{% else %}
 				<p class="username">Arry Lee</p>

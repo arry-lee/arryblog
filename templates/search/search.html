@@ -14,15 +14,16 @@
         <div class="col-md-12 column">
             {% for item in page %}
             <h2>
-                <a href="{% url 'article:detail' item.object.id %}">{{ item.object.title }}</a>
+                <a href="{% url 'article:article-detail' item.object.id %}">{{ item.object.title }}</a>
             </h2>
             <p>
-                {{ item.object.content | striptags}}
+                {{ item.object.content | striptags|cut:'#'|truncatewords:100}}
             </p>
-            <p>
-            <span class="pinned-item-meta py" style="background-color: {{item.object.tag.color}}"></span>
-            {{item.object.tag}}
-            </p>
+                <p class="text-right"> 
+                {% for tag in item.object.tags.all %}
+                <span class="label" style="background-color: {{tag.color}};">{{tag.name}}</span>
+                {% endfor %}
+                </p>
             <br>
             {% endfor %}
             <ul class="pagination">

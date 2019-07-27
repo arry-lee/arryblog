@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'mdeditor/', include('mdeditor.urls')), # markdown 模块
     url(r'^comments/', include('django_comments.urls')),
     url(r'^', include('article.urls',namespace='article')),  # 文章模块
+    url(r'^', include('user.urls',namespace='user')), 
 ]
 
 # if settings.DEBUG:

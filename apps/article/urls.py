@@ -5,6 +5,7 @@ from article.views import (AboutView, ArticleCreate,
 	ArticleYearArchiveView, ArticleTypeList, ArticleTypeUpdate, ArticleUpdate, 
 	IndexView, JsonDate,MusicView,ResumeView,ArticleTypeDetail)
 
+from article.views import test
 
 urlpatterns = [
 	url(r'^$', IndexView.as_view(), name='index'), # 首页
@@ -25,4 +26,6 @@ urlpatterns = [
 	url(r'^music/$', MusicView.as_view(), name='about'), 
 	url(r'^resume/$',ResumeView.as_view(),name='resume'),
 	url(r'^article/(?P<slug>[a-zA-Z]+)/$', ArticleTypeDetail.as_view(), name='articletype-detail'),
+	url(r'^test/$', test, name='test'),
+
 ]

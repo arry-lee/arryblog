@@ -3,32 +3,32 @@
 <div class="col-md-1">
 </div>
 <div class="col-md-10 col-sm-12">
-<form action="{% url 'article:article-add'%}" method="post">
+<form class="form-control" action="{% url 'article:article-add'%}" method="post">
 	{% csrf_token %}
 
 	{% for hidden in form.hidden_fields %}
 	{{hidden}}
 	{% endfor %}
 
-	<fieldset>
+	<div class="form-group">
 	<label>标题</label>
 	{{ form.title }}
-	</fieldset>
+	</div>
 
-	<fieldset>
+	<div class="form-group">
 	<label>标签</label>
-	{{ form.tag }}
-	</fieldset>
+	{{ form.tags }}
+	</div>
 
-	<fieldset>
+	<div class="form-group">
 	<label>类别</label>
 	{{ form.type }}
-	</fieldset>
+	</div>
 
-	<fieldset>
+	<div class="form-group">
 	{{ form.media }}
 	{{ form.content }}
-	</fieldset>
+	</div>
 
     {{ form.user.as_hidden }}
 	<input class="btn btn-default btn-normal" type="submit" value="保存" />

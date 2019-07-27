@@ -14,6 +14,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import sys
 
+
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
@@ -48,10 +50,24 @@ INSTALLED_APPS = (
     'library',# 书架模块
     'django_comments',
     'django.contrib.sites',
+    'djcelery',
 )
 
 COMMENTS_APP = 'library'
 COMMENTS_ALLOW_PROFANITIES = True
+
+# django-celery 相关配置
+import djcelery
+djcelery.setup_loader()
+BROKER_URL  = "redis://127.0.0.1:6379/3"
+
+CELERY_RESULT_BACKEND = "redis://localhost:6379/3"
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_RESULT_EXPIRES = 60*60*24
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+
 
 SITE_ID = 1
 
@@ -103,9 +119,11 @@ DATABASES = {
 
 # django认证系统使用的模型类
 AUTH_USER_MODEL='user.User'
-AUTHENTICATION_BACKENDS = (
+AUTHENTICATION_BACKENDS = [
+    'user.user_login_backend.EmailOrUsernameModelBackend',# 自定义的后端认证类
     'django.contrib.auth.backends.ModelBackend',
-    )
+]
+    
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
@@ -147,22 +165,22 @@ EMAIL_FROM = '阿锐<arry_lee@qq.com>'
 
 
 # Django 的缓存配置
-# CACHES = {
-#     "default":{
-#         "BACKEND":"django_redis.cache.RedisCache",
-#         "LOCATION":"redis://127.0.0.1:6379/9",
-#         "OPTIONS":{
-#             "CLIENT_CLASS":"django_redis.client.DefaultClient"
-#         }
-#     }
-# }
-
-# 缓存设置，开发环境用dummycache，就是实现了接口的假缓存
 CACHES = {
-    'default':{
-        'BACKEND':'django.core.cache.backends.dummy.DummyCache',
+    "default":{
+        "BACKEND":"django_redis.cache.RedisCache",
+        "LOCATION":"redis://127.0.0.1:6379/9",
+        "OPTIONS":{
+            "CLIENT_CLASS":"django_redis.client.DefaultClient"
+        }
     }
 }
+
+# 缓存设置，开发环境用dummycache，就是实现了接口的假缓存
+# CACHES = {
+#     'default':{
+#         'BACKEND':'django.core.cache.backends.dummy.DummyCache',
+#     }
+# }
 
 # session配进缓存里面
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
@@ -170,7 +188,7 @@ SESSION_CACHE_ALIAS = "default"
 
 
 # 配置登录url地址
-LOGIN_URL='/user/login' 
+LOGIN_URL='/login' 
 
 
 # 设置django文件存储类
