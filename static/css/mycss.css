@@ -48,7 +48,7 @@
 
 .article{
     height: 220px; 
-	border: 2px solid  rgb(209, 213, 218);
+	border: 1px solid  rgb(209, 213, 218);
 	border-radius: 3px;
 	font-size: 14px;
 	margin-bottom: 16px;
@@ -179,3 +179,12 @@ a {
     width: 40%;
     background-color: #24292e;
 }*/
+
+.form-signin{
+    margin-top: 50px;
+    padding:50px;
+    border:1px solid rgb(209, 213, 218);
+    /*position: relative;*/
+    /*margin: 0 auto; /*水平居中*/*/
+    /*top: 50%; /*偏移*/*/
+}

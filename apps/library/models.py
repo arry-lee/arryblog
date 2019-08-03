@@ -9,17 +9,6 @@ class TimeStampedModel(models.Model):
     class Meta:
         abstract = True
 
-# class Location(TimeStampedModel):
-#     name = models.CharField(max_length=36)
-
-#     class Meta:
-#         ordering = ('name',)
-#         db_table = 'df_location'
-#         verbose_name = '地点'
-#         verbose_name_plural = verbose_name
-#     def __str__(self):
-#         return self.name
-
 class Author(TimeStampedModel):
     name = models.CharField(max_length=36)
 
@@ -35,11 +24,8 @@ class Author(TimeStampedModel):
 class Book(TimeStampedModel):
     origkey = models.CharField(max_length=36, blank=True, null=True)
     title = models.TextField()
-    # sortkey = models.TextField('Authors', blank=True)
     year_published = models.DateField(blank=True, null=True)
     authors = models.ManyToManyField(Author)
-    # location = models.ForeignKey(Location, blank=True, null=True) 
-    #     #    default=u'?', on_delete=models.SET_DEFAULT)
     comment = models.TextField(blank=True)
 
     class Meta:

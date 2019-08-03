@@ -5,7 +5,7 @@ from article.views import (AboutView, ArticleCreate,
 	ArticleYearArchiveView, ArticleTypeList, ArticleTypeUpdate, ArticleUpdate, 
 	IndexView, JsonDate,MusicView,ResumeView,ArticleTypeDetail)
 
-from article.views import test
+from article import views
 
 urlpatterns = [
 	url(r'^$', IndexView.as_view(), name='index'), # 首页
@@ -26,6 +26,30 @@ urlpatterns = [
 	url(r'^music/$', MusicView.as_view(), name='about'), 
 	url(r'^resume/$',ResumeView.as_view(),name='resume'),
 	url(r'^article/(?P<slug>[a-zA-Z]+)/$', ArticleTypeDetail.as_view(), name='articletype-detail'),
-	url(r'^test/$', test, name='test'),
-
+	
+	url(r'^timeline/$', ArticleList.as_view(), name='article-list'),
+	url(r'^test/$', views.test, name='test'),
 ]
+
+from article.views import TagViewSet
+
+
+tag_list = TagViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+tag_detail = TagViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+# tag_color = TagViewSet.as_view({
+#     'get': 'color'
+# }, renderer_classes=[renderers.StaticHTMLRenderer])
+
+
+urlpatterns += [url(r'^tags/$',tag_list,name='tag-list'),
+	url(r'^tags/(?P<pk>\d+)/$',tag_detail,name='tag-detail'),
+	# url(r'^tags/(?P<pk>\d+)/color/$',tag_color,name='tag-color'),
+	]
