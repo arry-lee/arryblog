@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load card_tags %}
+{% block container %}
+<div class="col-md-2"></div>
+<div class="col-md-8 col-sm-12">
+	<div class="panel panel-success">
+		<div class="panel-heading" id="question">
+		{{snippet.question}}
+		</div>
+		<div id="code">
+		{{snippet.code|highlight_code:snippet.language|safe}}
+		</div>
+		 <!-- List group -->
+
+		<ul class="list-group" id="answer">
+		<li class="list-group-item" id="output">
+			输出:<br>
+			<div class="well">{{snippet.output|linebreaksbr}}</div>
+		</li>
+		<li class="list-group-item" id="reason">
+			解释:<br>
+			<div class="well">{{snippet.reason}}</div>
+		</li>
+		</ul>
+
+		</div>
+
+		<div class="btn-group" role="group" aria-label="...">
+			<a href="/snippets/{{snippet.id|add:'-1'}}" type="button" class="btn btn-default" id="prev">上一题(A)</a>
+			<button type="button" class="btn btn-default" id="showanwser">显示答案(S)</button>
+<!-- 			<button type="button" class="btn btn-default" id="random"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> 随机一题</button> -->
+			<a href="/snippets/{{snippet.id|add:'1'}}" type="button" class="btn btn-default" id="next">下一题(D)</a>
+		</div>
+</div>
+<div class="col-md-2"></div>
+{% endblock container %}
+
+
+{% block bottomfiles %}
+	<script type="text/javascript">
+		$(function() {
+			var $answer = $("#answer")
+			$answer.toggle();
+			$("#showanwser").click(function(){
+				$answer.toggle();
+				$("#showanwser").hide();
+			});
+
+			$(document).keydown(function(event){
+			if(event.which == 65 ){//A键
+				window.location.href = "/snippets/{{snippet.id|add:'-1'}}";
+			}
+			if(event.which == 83 ){//S键
+				$answer.toggle();
+				$("#showanwser").toggle();
+			}
+			if(event.which == 68 ){//D键
+				// alert("你刚按了一下D键");
+				window.location.href = "/snippets/{{snippet.id|add:'1'}}"
+			}			
+			})
+		});   
+	</script>
+{% endblock bottomfiles %}

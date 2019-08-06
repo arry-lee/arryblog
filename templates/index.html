@@ -13,7 +13,7 @@
 				</a>
 				<div class="article-content">
 					<p>
-						{{article.content|striptags|linebreaksbr|cut:'#'}}
+						{{article.content|striptags|linebreaksbr|cut:'#'|truncatewords:100}}
 					</p>
 				</div>
 
@@ -115,6 +115,7 @@
 			 <a type="button" class="btn btn-default btn-block btn-normal" href="archive/2018">2018</a>
 		</div>
 	</div>
+
 {% endblock panel-0 %}
 
 {% block panel-1 %}

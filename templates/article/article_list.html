@@ -1,7 +1,7 @@
 {% extends 'article/article_base.html' %}
 {% block middle %}
 
-<ul class="breadcrumb">
+<!-- <ul class="breadcrumb">
 				<li>
 					<a href="/">主页</a>
 				</li>
@@ -55,4 +55,41 @@
 		{% endfor %}
 	</tbody>
 </table>
+ -->
+<h3 class="text-normal">时间轴</h3>
+<div class="row clearfix">
+	<div class="timeline timeline-single-column">
+		{% regroup articles by create_time.date as article_list %} 
+		{% for date_article in article_list reversed %}
+			{% for article in date_article.list reversed %}
+			<div class="timeline-item">
+				<div class="timeline-point timeline-point-blank">
+				</div>
+				<div class="timeline-event">
+					<div class="timeline-heading">
+						<a class="title" href="/article/{{article.id}}" >
+							<h4>
+							{{article.title}}
+							</h4>
+						</a>
+					</div>
+					<div class="timeline-body">
+						<p>{{article.content|striptags|cut:'#'|truncatewords:20}}</p>
+					</div>
+					<div class="timeline-footer">
+						<p class="text-right">{{article.create_time.time}}</p>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+			<span class="timeline-label">
+				<span class="label label-info">{{ date_article.grouper }}</span>
+			</span>
+		{% endfor %}
+
+		<span class="timeline-label">
+			<button class="btn btn-info"><i>没有更多了</i></button>
+		</span>
+	</div>
+</div>
 {% endblock middle %}

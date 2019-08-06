@@ -1,4 +1,5 @@
 {% extends 'article/article_base.html' %}
+{% load card_tags %}
 {% block middle %}
 	<div class="page-header">
 	  <h1>{{article.title}} </h1>
@@ -14,3 +15,46 @@
 	{{article.content|safe}}
 {% endblock middle %}
 
+{% block right %}
+<div class="sidebar hidden-print hidden-xs hidden-sm">	
+	<h4><strong>目录</strong></h4>
+	{{ article.toc|safe }}
+</div>
+ 
+          
+{% endblock%}
+
+
+{% block bottomfiles %}
+<script type="text/javascript">
+	$(function () {
+	  $('.toc').addClass('tree'); // 把 toc 变成 tree
+	  // 找到有子节点的节点，在其内部后面加上控制点击图标
+	  $('.tree li:has(ul)').addClass('parent_li').prepend('<span class="glyphicon glyphicon-plus-sign"></span>'); 
+	  $('.tree li.parent_li').find(' > ul > li').hide();//有子元素就把子元素隐藏起来
+
+	  $('.tree li.parent_li > span').on('click', function (e) {
+	  	// 切换子元素的状态
+	    var children = $(this).parent('li.parent_li').find(' > ul > li');
+	    
+	    $(this).parent('li.parent_li').siblings().find(' > ul > li').hide('fast');
+	    $(this).parent('li.parent_li').siblings().find(' > span').addClass('glyphicon-plus-sign').removeClass('glyphicon-minus-sign');
+
+	    if (children.is(":visible")) {
+	      children.hide('fast');
+	      $(this).addClass('glyphicon-plus-sign').removeClass('glyphicon-minus-sign');
+
+	    } else {
+	      children.show('fast');
+	      $(this).addClass('glyphicon-minus-sign').removeClass('glyphicon-plus-sign');
+
+	    }
+
+	    e.stopPropagation();
+
+	  });
+
+	});
+	</script>
+
+{% endblock %}
