@@ -9,41 +9,46 @@
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-2 column">
-				
-				{% cache 500 gravatar%}
-				{{user.email|gravatar:460}}
-				{% endcache %}
-				<!-- {{ user.email|gravatar:460}} -->
-				<!-- <img alt="140x140" src="{% static 'images/arry460.png' %}" class="img-thumbnail" /> -->
-				{% if user.nickname %}
-				<p class="username">{{user.nickname}}</p>
-				{% elif user.username%}
-				<p class="username">{{user.username}}</p>
-				{% else %}
-				<p class="username">Arry Lee</p>
-				{% endif %}
-				{% if user.slogon %}
-				<p class="slogon">{{user.slogon}}</p>
-				{% else %}
-				<p class="slogon">A real romantic youth.</p>
-				{% endif %}
-				<p class="location"><span class="glyphicon glyphicon-map-marker"aria-hidden="true"></span>中国 南京</p>
+				<div class="row">
 
+					<div class="col-sm-4 col-md-12 column">
+						{% cache 500 gravatar%}
+						{{user.email|gravatar:460}}
+						{% endcache %}
+					</div>
 
-				<button type="button" class="btn btn-default btn-block" id="btn1" style="display: none">编辑</button>
-				
-				<div style="margin-top:40px;">
-					<blockquote>
-					<p>
-						{{quote.quote}}
-					</p> 
-					<p>
-						{{quote.translation}}
-					</p>
-					<small><cite>{{quote.source}}</cite></small>
-					</blockquote>
+					<div class="col-sm-8 col-md-12 column">
+						{% if user.nickname %}
+						<p class="username">{{user.nickname}}</p>
+						{% elif user.username%}
+						<p class="username">{{user.username}}</p>
+						{% else %}
+						<p class="username">Arry Lee</p>
+						{% endif %}
+						{% if user.slogon %}
+						<p class="slogon">{{user.slogon}}</p>
+						{% else %}
+						<p class="slogon">A real romantic youth.</p>
+						{% endif %}
+						<p class="location"><span class="glyphicon glyphicon-map-marker"aria-hidden="true"></span>中国 南京</p>
+
+						<button type="button" class="btn btn-default btn-block" id="btn1" style="display: none">编辑</button>
+					</div>
+
+					<div class="col-sm-12 col-md-12 column">
+						<div style="margin-top:40px;">
+							<blockquote>
+							<p>
+								{{quote.quote}}
+							</p> 
+							<p>
+								{{quote.translation}}
+							</p>
+							<small><cite>{{quote.source}}</cite></small>
+							</blockquote>
+						</div>
+					</div>
 				</div>
-
 			</div>
 			<div class="col-md-9 column">
 				<div class="tabbable" id="tabs-573644">
@@ -103,4 +108,21 @@
 
 
 {% block bottom %}
+<footer class="main-footer small text-center">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+        	<small>网站备案号:皖ICP备19005956号-1</small>
+        </div>
+
+        <div class="col-sm-4">
+        	<small>Copyright ©2018-2019. Powered by Django</small>
+        </div>
+
+        <div class="col-sm-4">
+        	<small><a href="https://github.com/arry-lee">Github</a></small>
+        </div>
+    </div>
+</div>
+</footer>
 {% endblock bottom %}

@@ -75,12 +75,17 @@
 					<li>
 						 <a href="/photo">相册</a>
 					</li>
-					<li>
-						 <a href="/timeline">时间轴</a>
-					</li>
+
 					<li>
 						 <a href="/snippets/1/">题库</a>
 					</li>
+					<li>
+						 <a href="/python/">源码</a>
+					</li>
+					<li>
+						 <a href="/timeline">时间轴</a>
+					</li>
+
 				</ul>
 				{# 导航右侧块 #}
 				{% block navbar_right %}
@@ -168,12 +173,11 @@
 
 	{# 网站主体内容块 #}
 	{% block container %}
-
 	{% endblock container %}
-
-
+	<hr>
     {# 网页底部html元素块 #}
-    {% block bottom %}{% endblock bottom %}
+    {% block bottom %}
+    {% endblock bottom %}
     {# 网页底部引入文件块 #}
 	{% block bottomfiles %}{% endblock bottomfiles %}
   </body>

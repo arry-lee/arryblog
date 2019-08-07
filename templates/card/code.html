@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load card_tags %}
+{% block container %}
+<div class="col-md-7 col-sm-12">
+	<div class="panel panel-success">
+		<div class="panel-heading">
+		模块名:{{name}}.py
+		</div>
+		<div id="code" style="overflow: auto;"> <!-- style="height: 300px;overflow: auto;" -->
+		<!-- 	|highlight_code:module.language|safe -->
+		{{file|highlight_code:'python'|safe}}
+		</div>
+		 <!-- List group -->
+		</div>
+</div>
+<div class="col-md-5">
+		<div class="panel panel-success">
+		<div class="panel-heading">
+			文档
+		</div>
+		<ul class="list-group">
+		<li class="list-group-item">
+			<div class="small doc" style="overflow: auto;">{{doc|linebreaksbr}}</div>
+		</li>
+		<li class="list-group-item">
+			字典:<br>
+			<div class="well">
+				{% for key in all %}
+				<a href="#{{key}}"><code>{{key}}</code></a>
+				{% endfor %}
+			</div>
+		</li>
+		</ul>
+		</div>
+</div>
+{% endblock container %}
+
+{% block bottomfiles %}
+	<script type="text/javascript">
+		$(function() {
+			// 找到函数，将函数名设置为id
+			var h=window.innerHeight||document.body.clientHeight||document.documentElement.clientHeight;
+        	$("#code").css("height",h);
+        	$(".doc").css("height",h/2);
+        	// $("#code").css("overflow",auto);
+
+			$("span.nf,span.nc").each(function(i){
+				$(this).attr('id',$(this).text())
+		    });
+
+		});   
+	</script>
+{% endblock bottomfiles %}

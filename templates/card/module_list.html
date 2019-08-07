@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block container %}
+<div class="col-md-7 col-sm-12">
+</div>
+<div class="col-md-5">
+	{% for module in modules %}
+	<li><a href="/python/{{ module }}">{{ module }}</a></li>
+	{% endfor %}
+</div>
+{% endblock container %}
+

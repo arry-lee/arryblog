@@ -13,21 +13,32 @@
  	{% endfor %}
 	</p>
 	{{article.content|safe}}
+	<hr>
+	<div class="row text-center">
+        <div class="col-sm-6">
+        	<a class="title" href="/article/{{article.id|add:'-1'}}" >上一篇</a>
+        </div>
+        <div class="col-sm-6">
+        	<a class="title" href="/article/{{article.id|add:'1'}}" >下一篇</a>
+        </div>
+    </div>
+
 {% endblock middle %}
 
 {% block right %}
 <div class="sidebar hidden-print hidden-xs hidden-sm">	
 	<h4><strong>目录</strong></h4>
 	{{ article.toc|safe }}
-</div>
- 
-          
+</div> 
 {% endblock%}
+
+
 
 
 {% block bottomfiles %}
 <script type="text/javascript">
 	$(function () {
+	  $('table').addClass('table table-striped well');	
 	  $('.toc').addClass('tree'); // 把 toc 变成 tree
 	  // 找到有子节点的节点，在其内部后面加上控制点击图标
 	  $('.tree li:has(ul)').addClass('parent_li').prepend('<span class="glyphicon glyphicon-plus-sign"></span>'); 
