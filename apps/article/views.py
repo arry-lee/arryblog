@@ -24,9 +24,7 @@ import datetime
 
 from . import tasks
 
-def test(request):
-    tasks.test.delay()
-    return HttpResponse('hello world')
+
 
 
 def get_last_monday(today):
@@ -217,11 +215,13 @@ class ArticleDetail(DetailView):
     def get_context_data(self, **kwargs):
         # 将 md 转换为 html 显示
         context = super().get_context_data(**kwargs)
-        context['article'].content = markdown.markdown(context['article'].content,
-            extensions=[
+        md = markdown.Markdown(extensions=[
             'markdown.extensions.extra',
             'markdown.extensions.codehilite',
             'markdown.extensions.toc'])
+
+        context['article'].content = md.convert(context['article'].content)
+        context['article'].toc = md.toc
         return context
 
 class ArticleCreate(LoginRequiredMixin,CreateView):

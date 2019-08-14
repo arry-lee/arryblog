@@ -14,8 +14,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import sys
 
-
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
@@ -51,6 +49,9 @@ INSTALLED_APPS = (
     'django_comments',
     'django.contrib.sites',
     'djcelery',
+    'rest_framework',
+    'card',
+    'notes',
 )
 
 COMMENTS_APP = 'library'

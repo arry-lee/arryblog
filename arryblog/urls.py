@@ -29,6 +29,8 @@ urlpatterns = [
     url(r'^comments/', include('django_comments.urls')),
     url(r'^', include('article.urls',namespace='article')),  # 文章模块
     url(r'^', include('user.urls',namespace='user')), 
+    url(r'^', include('card.urls',namespace='card')),  # 卡片模块
+    url(r'^', include('notes.urls',namespace='notes')),  # 卡片模块
 ]
 
 # if settings.DEBUG:

@@ -1,37 +1,70 @@
 {% extends 'base.html' %}
 {% load card_tags %}
+{% load staticfiles %}
+
 {% block container %}
-<div class="col-md-7 col-sm-12">
+<div class="col-md-2">
+	<li class="list-group-item">
+		字典:<br>
+		<div>
+			{% for key in all %}
+			<a href="#{{key}}"><code>{{key}}</code></a>
+			{% endfor %}
+		</div>
+	</li>
+</div>
+<div class="col-md-8 col-sm-12">
+	<div class="panel panel-success">
+		<div class="panel-heading">
+			<div class="btn-toolbar" role="toolbar" aria-label="...">
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" class="btn btn-default btn-sm">
+	  				<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Watch
+					</button>
+
+					<button type="button" class="btn btn-default btn-sm">
+	  				{{watch}}
+					</button>
+				</div>
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" class="btn btn-default btn-sm">
+	  				<span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Pin
+					</button>
+				</div>
+
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" class="btn btn-default btn-sm">
+	  				<span class="glyphicon glyphicon-edit" aria-hidden="true"></span> Edit
+					</button>				
+					<button type="button" class="btn btn-default btn-sm">
+	  				<span class="glyphicon glyphicon-share" aria-hidden="true"></span> Share
+					</button>
+				</div>
+				<div class="btn-group" role="group" aria-label="...">
+					<button type="button" class="btn btn-default btn-sm" id="showdoc">
+	  				隐藏文档
+					</button>
+				</div>
+			</div>
+		</div>
+		<ul class="list-group">
+		<li class="list-group-item">
+			<div class="doc" >{{doc|linebreaksbr}}</div>
+		</li>
+		</ul>
+		</div>
+
 	<div class="panel panel-success">
 		<div class="panel-heading">
 		模块名:{{name}}.py
 		</div>
-		<div id="code" style="overflow: auto;"> <!-- style="height: 300px;overflow: auto;" -->
-		<!-- 	|highlight_code:module.language|safe -->
+		<div id="code">
 		{{file|highlight_code:'python'|safe}}
 		</div>
-		 <!-- List group -->
-		</div>
+
+	</div>
 </div>
-<div class="col-md-5">
-		<div class="panel panel-success">
-		<div class="panel-heading">
-			文档
-		</div>
-		<ul class="list-group">
-		<li class="list-group-item">
-			<div class="small doc" style="overflow: auto;">{{doc|linebreaksbr}}</div>
-		</li>
-		<li class="list-group-item">
-			字典:<br>
-			<div class="well">
-				{% for key in all %}
-				<a href="#{{key}}"><code>{{key}}</code></a>
-				{% endfor %}
-			</div>
-		</li>
-		</ul>
-		</div>
+<div class="col-md-2">
 </div>
 {% endblock container %}
 
@@ -39,10 +72,10 @@
 	<script type="text/javascript">
 		$(function() {
 			// 找到函数，将函数名设置为id
-			var h=window.innerHeight||document.body.clientHeight||document.documentElement.clientHeight;
-        	$("#code").css("height",h);
-        	$(".doc").css("height",h/2);
-        	// $("#code").css("overflow",auto);
+			$("#showdoc").click(function(){
+				$('.doc').toggle();
+				if ($(this).text() == '显示文档') {$(this).text('隐藏文档')} else {$(this).text('显示文档')}
+			});
 
 			$("span.nf,span.nc").each(function(i){
 				$(this).attr('id',$(this).text())
@@ -50,4 +83,7 @@
 
 		});   
 	</script>
+
+	<script type="text/javascript" src="{% static 'js/highlight.js' %}"></script>
+
 {% endblock bottomfiles %}

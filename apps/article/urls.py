@@ -28,7 +28,6 @@ urlpatterns = [
 	url(r'^article/(?P<slug>[a-zA-Z]+)/$', ArticleTypeDetail.as_view(), name='articletype-detail'),
 	
 	url(r'^timeline/$', ArticleList.as_view(), name='article-list'),
-	url(r'^test/$', views.test, name='test'),
 ]
 
 from article.views import TagViewSet

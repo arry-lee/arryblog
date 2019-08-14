@@ -1,11 +1,31 @@
 {% extends 'base.html' %}
 {% block container %}
-<div class="col-md-7 col-sm-12">
+<div class="col-md-2"></div>
+<div class="col-md-8">
+<!-- 按首字母排序真的弄了半天 -->
+<!-- {% regroup modules|dictsort:'0' by 0 as module_list%} -->
+	<table class="table table-condensed table-hover table-striped table-bordered">
+	<thead>
+		<tr>
+			<th>#</th>
+			<th>模块名</th>
+			<th>描述信息</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for name,desc in modules %}
+		<tr>
+			<td>{{forloop.counter}}</td>
+			<td><a href="/python/{{name}}">{{name}}</a></td>
+			<td>{{desc}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+	</table>
+
 </div>
-<div class="col-md-5">
-	{% for module in modules %}
-	<li><a href="/python/{{ module }}">{{ module }}</a></li>
-	{% endfor %}
+
 </div>
 {% endblock container %}
+
 

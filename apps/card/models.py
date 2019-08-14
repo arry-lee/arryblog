@@ -13,7 +13,7 @@ class Snippet(models.Model):
     '''代码片段模型'''
     question = models.CharField(max_length=40, default='这段代码输出是什么？',verbose_name='题目')
     code = models.TextField(verbose_name='代码段')
-    output = models.CharField(max_length=40, null=True,verbose_name='输出')
+    output = models.TextField(verbose_name='输出',null=True)
     reason = models.CharField(max_length=200, null=True,verbose_name='解释')
 
     linenos = models.BooleanField(default=False)

@@ -107,7 +107,7 @@
 								 <a href="/article/add">写 文章</a>
 							</li>
 							<li>
-								 <a href="/article/add">新的灵感</a>
+								 <a data-toggle="modal" href="#newnote" data-whatever="@mdo">新的灵感</a>
 							</li>
 							<li>
 								 <a href="/atypes/add/">新建项目</a>
@@ -169,6 +169,9 @@
 			</div>
 		</div>
 	</nav>
+</div>
+
+
 	{% endblock header_con %}
 
 	{# 网站主体内容块 #}
@@ -179,7 +182,59 @@
     {% block bottom %}
     {% endblock bottom %}
     {# 网页底部引入文件块 #}
-	{% block bottomfiles %}{% endblock bottomfiles %}
+	{% block bottomfiles %}
+	{% endblock bottomfiles %}
+
+
+	<div class="modal fade bs-example-modal-lg" id="newnote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="exampleModalLabel">新 灵感</h4>
+	      </div>
+	      <div class="modal-body">
+	        <form>
+	          <div class="form-group">
+	            <label for="recipient-name" class="control-label">标题:</label>
+	            <input type="text" class="form-control" id="notetitle">
+	          </div>
+	          <div class="form-group">
+	            <label for="message-text" class="control-label">笔记:</label>
+	            <textarea class="form-control" id="notecontent"></textarea>
+	          </div>
+	        </form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	        {% csrf_token %}
+	        <button type="button" class="btn btn-primary" id="savenote">保存</button>
+	      </div>
+	    </div>
+	  </div>
+  
+	<script type="text/javascript">
+		$(function () {
+			$('#savenote').on('click', function () {
+				$title = $('#notetitle').val()
+				$content = $('#notecontent').val()
+				// 必须要有csrftoken认证
+				csrf = $('input[name="csrfmiddlewaretoken"]').val()
+			  	$.ajax({
+				    url: 'notes/',
+				    type: 'POST',
+				    dataType: 'json',
+				    data:{'title':$title,'content':$content,'csrfmiddlewaretoken':csrf}
+				})
+				.done(function(data) {
+				    $('#newnote').modal('hide');
+				})
+				.fail(function() {
+				    alert('服务器超时，请重试！');
+				});
+			})
+		});	
+	</script>
   </body>
 </html>
 
