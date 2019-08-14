@@ -32,7 +32,7 @@
 						{% endif %}
 						<p class="location"><span class="glyphicon glyphicon-map-marker"aria-hidden="true"></span>中国 南京</p>
 
-						<button type="button" class="btn btn-default btn-block" id="btn1" style="display: none">编辑</button>
+						<button type="button" class="btn btn-sm btn-block" data-toggle="modal" data-target="#contactme">联系我</button>
 					</div>
 
 					<div class="col-sm-12 col-md-12 column">
@@ -110,19 +110,83 @@
 {% block bottom %}
 <footer class="main-footer small text-center">
 <div class="container">
-    <div class="row">
-        <div class="col-sm-4">
-        	<small>网站备案号:皖ICP备19005956号-1</small>
-        </div>
+	<div class="row">
+		<div class="col-sm-4">
+			<small>网站备案号:皖ICP备19005956号-1</small>
+		</div>
 
-        <div class="col-sm-4">
-        	<small>Copyright ©2018-2019. Powered by Django</small>
-        </div>
+		<div class="col-sm-4">
+			<small>Copyright ©2018-2019. Powered by Django</small>
+		</div>
 
-        <div class="col-sm-4">
-        	<small><a href="https://github.com/arry-lee">Github</a></small>
-        </div>
-    </div>
+		<div class="col-sm-4">
+			<small><a href="https://github.com/arry-lee">Github</a></small>
+		</div>
+	</div>
 </div>
 </footer>
+
+<div class="modal fade bs-example-modal-lg" id="contactme" tabindex="-2" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title" id="exampleModalLabel">联系我</h4>
+	  </div>
+	  <div class="modal-body">
+		<form>
+		  <div class="form-group">
+			<label for="subject" class="control-label">主题:</label>
+			<input type="text" class="form-control" id="subject">
+		  </div>
+		  <div class="form-group">
+			<label for="content" class="control-label">正文:</label>
+			<textarea class="form-control" id="content"></textarea>
+		  </div>
+		  <div class="form-group">
+			<label for="email" class="control-label">邮箱:</label>
+			<input type="email" class="form-control" id="email">
+		  </div>
+		</form>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+		{% csrf_token %}
+		<button type="button" class="btn btn-primary" id="send">发送</button>
+	  </div>
+	</div>
+  </div>
+
+<script type="text/javascript">
+	$(function () {
+		$('#send').on('click', function () {
+			$subject = $('#subject').val()
+			$content = $('#content').val()
+			$email = $('#email').val()
+			// 必须要有csrftoken认证
+			csrf = $('input[name="csrfmiddlewaretoken"]').val()
+			$.ajax({
+				url: 'contact/',
+				type: 'POST',
+				dataType: 'json',
+				data:{'subject':$subject,
+					'content':$content,
+					'email':$email,
+					'csrfmiddlewaretoken':csrf}
+			})
+			.done(function(data) {
+				if (data.code=='1') {
+					$('#contactme').modal('hide');
+					alert('邮件发送成功！');
+				} else {
+					alert('数据不完整，请重试！');
+				}
+				
+			})
+			.fail(function() {
+				alert('服务器超时，请重试！');
+			});
+		})
+	});	
+</script>
 {% endblock bottom %}

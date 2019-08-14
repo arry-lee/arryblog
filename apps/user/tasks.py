@@ -5,11 +5,9 @@ from django.core.mail import send_mail
 from arryblog import settings
 
 @task
-def send_a_email(message):
-	subject = "LOG"
-	sender =settings.EMAIL_FROM
-	recipients = ['lixiaorui@seu.edu.cn']
-	send_mail(subject,message,sender,recipients)
+def send_email(subject,content,sender):
+	recipients = ['me@zezo.cc']
+	send_mail(subject,content,sender,recipients)
 
 @task
 def send_active_email(subject,receiver,content):
