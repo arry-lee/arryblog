@@ -1,6 +1,8 @@
 # from django.core.paginator import Paginator
 # from django_redis import get_redis_connection
 from article.models import Article, ArticleType, Quote
+from notes.models import Note
+
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse,HttpResponse
@@ -128,6 +130,11 @@ class IndexView(View):
             # 统计新增文章数量
             article_counter = Article.objects.filter(create_time__gt = today).count()
             articletype_counter = ArticleType.objects.filter(create_time__gt = today).count()
+            
+            if request.user.is_authenticated():
+                notes = Note.objects.filter(owner_id=request.user.id)[:5]
+            else:
+                notes = Note.objects.filter(owner_id=1)[:5]
             context = {
                 'quote':quote,
                 'new_articles':new_articles,
@@ -138,6 +145,7 @@ class IndexView(View):
                 'article_counter':article_counter,
                 'articletype_counter':articletype_counter,
                 'page_list':page_list,
+                'notes':notes,
             }
 
             # cache.set('index_page',context,60)
@@ -208,6 +216,9 @@ class ArticleList(ListView):
             # 没登录就显示我的文章
             return Article.objects.filter(user_id=1)
 class ArticleDetail(DetailView):
+    """
+    Detail view for a article
+    """
     model = Article
     # template_name = "article_detail.html" #加上就会找不到
     context_object_name = 'article'

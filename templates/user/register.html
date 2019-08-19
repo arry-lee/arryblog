@@ -3,7 +3,7 @@
 {% block title %}阿锐博客-注册{% endblock title %}
 
 {% block middle %}
-<form class="form-signin form-horizontal" action="{% url 'user:register' %}" method="post">
+<form class="form-signin form-horizontal" action="{% url 'user:register' %}" method="post" style="background-color: white">
     {% csrf_token %}
     {{ form.non_field_errors }}
     {% for field in form %}

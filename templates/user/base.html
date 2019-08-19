@@ -1,15 +1,26 @@
 {% extends 'index_base.html' %}
+
+
 {% block container %}
-<div class="col-md-4">
-{% block left %}
-{% endblock left %}
-</div>
-<div class="col-md-4 col-xs-12">
-{% block middle %}
-{% endblock middle %}
-</div>
-<div class="col-md-4">
-{% block right %}
-{% endblock right %}
+<div class="jumbotron" style="background-color: #008c8c">
+	 <div class="container">
+	 	<div class="row clearfix">
+			<div class="col-md-4">
+			{% block left %}
+			{% endblock left %}
+			</div>
+			<div class="col-md-4 col-xs-12">
+			{% block middle %}
+			{% endblock middle %}
+			</div>
+			<div class="col-md-4">
+			{% block right %}
+			{% endblock right %}
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock container %}
+
+{% block bottom %}
+{% endblock %}}

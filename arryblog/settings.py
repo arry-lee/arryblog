@@ -29,11 +29,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
+ADMINS = [('Me', 'me@zezo.cc'),]
 # Application definition
 
 INSTALLED_APPS = (
     'django.contrib.admin',
+    'django.contrib.admindocs',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -52,6 +53,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'card',
     'notes',
+    'docs',
 )
 
 COMMENTS_APP = 'library'
@@ -81,6 +83,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.admindocs.middleware.XViewMiddleware',#doc
 )
 
 ROOT_URLCONF = 'arryblog.urls'

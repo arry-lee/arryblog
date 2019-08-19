@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),# 自动文档
     url(r'^admin/', include(admin.site.urls)),
     url(r'^search',include('haystack.urls')), # 全文检索框架
     url(r'^user/', include('user.urls',namespace='user')),  # 用户模块
@@ -30,8 +31,12 @@ urlpatterns = [
     url(r'^', include('article.urls',namespace='article')),  # 文章模块
     url(r'^', include('user.urls',namespace='user')), 
     url(r'^', include('card.urls',namespace='card')),  # 卡片模块
-    url(r'^', include('notes.urls',namespace='notes')),  # 卡片模块
+    url(r'^', include('notes.urls',namespace='notes')),  #
+    # url(r'^', include('docs.urls',namespace='docs')),
+    # url(r'^', include('wx.urls',namespace='weixin'))
 ]
+
+
 
 # if settings.DEBUG:
 #     # static files (images, css, javascript, etc.)
