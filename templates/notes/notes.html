@@ -76,6 +76,9 @@
 						 <a href="/python/">源码</a>
 					</li>
 					<li>
+						 <a href="/note/">笔记</a>
+					</li>
+					<li>
 						 <a href="/timeline">时间轴</a>
 					</li>
 
@@ -213,7 +216,7 @@
 				<div class="nav-header">
 					笔记预览
 				</div>
-				{% for note in notes%}
+				{% for note in notes|dictsort:'update_time'%}
 					<div class="col-sm-12">
 						<div class="thumbnail">	
 							<button type="button" class="close delnote" aria-label="Close"><span aria-hidden="true">&times;</span><span class="hidden">{{note.id}}</span></button>
@@ -282,7 +285,8 @@
 				    url: '/notes/',
 				    type: 'POST',
 				    dataType: 'json',
-				    data:{'title':$title,'content':$content,'csrfmiddlewaretoken':csrf}
+				    headers:{'X-CSRFToken':csrf},
+				    data:{'title':$title,'content':$content,'is_delete':false}
 				})
 				.done(function(data) {
 				    $('#newnote').modal('hide');

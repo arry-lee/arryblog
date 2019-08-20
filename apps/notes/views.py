@@ -42,7 +42,7 @@ class NoteIndex(View):
 		notes = paginator.page(page)
 
 		context = dict(groups=groups,tags=tags,notes=notes)
-		context.update(title='浮云笔记')
+		context.update(title='笔记')
 
 		return render(request,'notes/notes.html',context)
 
@@ -53,16 +53,22 @@ class NoteList(generics.ListCreateAPIView,LoginRequiredMixin):
 	renderer_classes = [JSONRenderer]
 
 	def perform_create(self, serializer):
-		# print(self.request.POST)
-		serializer.save(owner=self.request.user,is_delete=False)
+		# print(self.request.POST.get('title'))
+		# print(self.request.POST.get('content'))
+		# print(serializer)
+
+		try:
+			g = Group.objects.get(id=1)# 必须要有一个group 不可为空
+			serializer.save(owner=self.request.user,group=g)
+		except Exception as e:
+			print(e)
+			raise e
 
 class NoteDetail(generics.RetrieveUpdateDestroyAPIView):
 	queryset = Note.objects.all()
 	serializer_class = NoteSerializer
 	renderer_classes = [JSONRenderer]
 
-	# def partial_update (self, serializer):
-	#  	serializer.save(is_delete=self.request.data['is_delete'])
 
 @require_POST
 def contactme(request):
