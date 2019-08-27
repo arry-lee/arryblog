@@ -63,8 +63,9 @@ class IndexView(View):
 
             today = datetime.datetime.today()
             # 获取最近一年的活动
-            # user = request.user  
             
+            user = request.user if request.user.is_authenticated() else 1
+
             activitys = cache.get('activitys')
             if not activitys:
                 last_year = today - datetime.timedelta(days=359)#365-6
@@ -75,7 +76,7 @@ class IndexView(View):
                     Activity.fake_activity(days=1)
                 finally:
                     tomorrow = today + datetime.timedelta(days=1)
-                    activitys = Activity.objects.filter(user=1,activity_date__range=(last_year,tomorrow)).order_by('activity_date')
+                    activitys = Activity.objects.filter(user=user,activity_date__range=(last_year,tomorrow)).order_by('activity_date')
                     cache.set('activitys',activitys,60*60*24)
             # 获取每日一句
             quote = cache.get('quote')
@@ -308,142 +309,142 @@ class ResumeView(TemplateView):
     template_name = "user/resume.html"
 
 
-# -------------------------------------------------
-# add REST view here
-# -------------------------------------------------
+# # -------------------------------------------------
+# # add REST view here
+# # -------------------------------------------------
 
-# 不需要这些了
-# from django.http import HttpResponse, JsonResponse
-# from django.views.decorators.csrf import csrf_exempt
+# # 不需要这些了
+# # from django.http import HttpResponse, JsonResponse
+# # from django.views.decorators.csrf import csrf_exempt
 
-from rest_framework.parsers import JSONParser
-from article.models import Tag
-from article.serializers import TagSerializer
-from rest_framework import status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-
-
-@api_view(['GET','POST'])
-def tag_list(request):
-    """
-    list all tags,or create a new tag
-    """
-    if request.method == 'GET':
-        tags = Tag.objects.all()
-        serializer = TagSerializer(tags,many=True)
-        return Response(serializer.data)
-
-    elif request.method == 'POST':
-        serializer = TagSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['GET','PUT','DELETE'])
-def tag_detail(request,pk):
-    """
-    更新或者删除 tag
-    """
-    try:
-        tag = Tag.objects.get(pk=pk)
-    except Tag.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
-    if request.method == 'GET':
-        serializer = TagSerializer(tag)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer = TagSerializer(tag,data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-
-    elif request.method == 'DELETE':
-        tag.delete()
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
-
-# 使用类视图
-from rest_framework.views import APIView
-from django.http import Http404
-
-class Taglist(APIView):
-    def get(self,request,format=None):
-        tags = Tag.objects.all()
-        serializer = TagSerializer(tags,many=True)
-        return Response(serializer.data)
-
-    def post(self,request,format=None):
-        serializer = TagSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-
-class TagDetail(APIView):
-    """
-    Retrieve, update or delete a tag instance.
-    """
-    def get_object(self, pk):
-        try:
-            return Tag.objects.get(pk=pk)
-        except Tag.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk, format=None):
-        tag = self.get_object(pk)
-        serializer = TagSerializer(tag)
-        return Response(serializer.data)
-
-    def put(self, request, pk, format=None):
-        tag = self.get_object(pk)
-        serializer = TagSerializer(tag, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk, format=None):
-        tag = self.get_object(pk)
-        tag.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-# 进一步使用通用视图
-from rest_framework import generics
-
-class TagList(generics.ListCreateAPIView):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+# from rest_framework.parsers import JSONParser
+# from article.models import Tag
+# from article.serializers import TagSerializer
+# from rest_framework import status
+# from rest_framework.decorators import api_view
+# from rest_framework.response import Response
 
 
-class TagDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
+# @api_view(['GET','POST'])
+# def tag_list(request):
+#     """
+#     list all tags,or create a new tag
+#     """
+#     if request.method == 'GET':
+#         tags = Tag.objects.all()
+#         serializer = TagSerializer(tags,many=True)
+#         return Response(serializer.data)
+
+#     elif request.method == 'POST':
+#         serializer = TagSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data,status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+# @api_view(['GET','PUT','DELETE'])
+# def tag_detail(request,pk):
+#     """
+#     更新或者删除 tag
+#     """
+#     try:
+#         tag = Tag.objects.get(pk=pk)
+#     except Tag.DoesNotExist:
+#         return Response(status=status.HTTP_404_NOT_FOUND)
+
+#     if request.method == 'GET':
+#         serializer = TagSerializer(tag)
+#         return Response(serializer.data)
+
+#     elif request.method == 'PUT':
+#         serializer = TagSerializer(tag,data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+#     elif request.method == 'DELETE':
+#         tag.delete()
+#         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+
+# # 使用类视图
+# from rest_framework.views import APIView
+# from django.http import Http404
+
+# class Taglist(APIView):
+#     def get(self,request,format=None):
+#         tags = Tag.objects.all()
+#         serializer = TagSerializer(tags,many=True)
+#         return Response(serializer.data)
+
+#     def post(self,request,format=None):
+#         serializer = TagSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data,status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+# class TagDetail(APIView):
+#     """
+#     Retrieve, update or delete a tag instance.
+#     """
+#     def get_object(self, pk):
+#         try:
+#             return Tag.objects.get(pk=pk)
+#         except Tag.DoesNotExist:
+#             raise Http404
+
+#     def get(self, request, pk, format=None):
+#         tag = self.get_object(pk)
+#         serializer = TagSerializer(tag)
+#         return Response(serializer.data)
+
+#     def put(self, request, pk, format=None):
+#         tag = self.get_object(pk)
+#         serializer = TagSerializer(tag, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+#     def delete(self, request, pk, format=None):
+#         tag = self.get_object(pk)
+#         tag.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# # 进一步使用通用视图
+# from rest_framework import generics
+
+# class TagList(generics.ListCreateAPIView):
+#     queryset = Tag.objects.all()
+#     serializer_class = TagSerializer
 
 
-# 使用视图集
-from rest_framework import viewsets
-# from rest_framework.decorators import action
+# class TagDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Tag.objects.all()
+#     serializer_class = TagSerializer
 
-class TagViewSet(viewsets.ModelViewSet):
-    """
-    This viewset automatically provides `list`, `create`, `retrieve`,
-    `update` and `destroy` actions.
 
-    Additionally we also provide an extra `highlight` action.
-    """
-    queryset = Tag.objects.all()
-    serializer_class = TagSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly,
-    #                       IsOwnerOrReadOnly]
+# # 使用视图集
+# from rest_framework import viewsets
+# # from rest_framework.decorators import action
 
-    # @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
-    def color(self, request, *args, **kwargs):
-        tag = self.get_object()
-        return Response(tag.color)
+# class TagViewSet(viewsets.ModelViewSet):
+#     """
+#     This viewset automatically provides `list`, `create`, `retrieve`,
+#     `update` and `destroy` actions.
 
-    # def perform_create(self, serializer):
-    #     serializer.save(owner=self.request.user)
+#     Additionally we also provide an extra `highlight` action.
+#     """
+#     queryset = Tag.objects.all()
+#     serializer_class = TagSerializer
+#     # permission_classes = [permissions.IsAuthenticatedOrReadOnly,
+#     #                       IsOwnerOrReadOnly]
+
+#     # @action(detail=True, renderer_classes=[renderers.StaticHTMLRenderer])
+#     def color(self, request, *args, **kwargs):
+#         tag = self.get_object()
+#         return Response(tag.color)
+
+#     # def perform_create(self, serializer):
+#     #     serializer.save(owner=self.request.user)

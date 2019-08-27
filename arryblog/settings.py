@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'card',
     'notes',
     'docs',
+    'api',
 )
 
 COMMENTS_APP = 'library'
@@ -223,3 +224,21 @@ HAYSTACK_SIGNAL_PROCESSOR ='haystack.signals.RealtimeSignalProcessor'
 
 # 指定搜索结果每页显示条数
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_VERSIONING_CLASS':"rest_framework.versioning.URLPathVersioning",
+    'DEFAULT_VERSION': 'v1',
+    'ALLOWED_VERSIONS': ['v1', 'v2'],
+    'VERSION_PARAM': 'version',
+
+    'DEFAULT_THROTTLE_CLASSES': [
+        'api.throttling.AnonRateThrottle',
+        'api.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        '_anon': '10/m',
+        '_user': '20/m',
+    },
+}

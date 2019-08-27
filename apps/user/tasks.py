@@ -19,3 +19,8 @@ def send_active_email(subject,receiver,content):
 				sender,
 				receiver,
 				html_message=content)
+
+@task
+def generate_user_activity():
+	from user.models import Activity
+	Activity.fake_activity(days=1)

@@ -13,14 +13,12 @@
 	<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
 	<link href="{% static 'css/mycss.css' %}" rel="stylesheet" type="text/css">
-	<link href="{% static 'css/timeline.css' %}" rel="stylesheet" type="text/css">
-	<link href="{% static 'css/segments.css' %}" rel="stylesheet" type="text/css">
-
   </head>
 
 
 
   <body>
+
 	<nav class="navbar navbar-default navbar-inverse navbar-static-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
@@ -165,6 +163,7 @@
 			</div>
 		</div>
 	</nav>
+
 	<div class="container-fluid">
 		<div class="row-fluid">
 			<div class="col-sm-2">
@@ -180,7 +179,7 @@
 				<div class="panel panel-default">
 					<div class="panel-heading" style="padding:3px;">
 						 <a class="panel-title collapsed" data-toggle="collapse" data-parent="#panel1" href="#panel-element-{{group.id}}">{{group}}</a><span class="Counter">{{group.notes.count}}</span>
-						 <button type="button" class="close newgroup">+</button>
+						 {% if user.username %}<button type="button" class="close newgroup">+</button>{% endif %}
 					</div>
 
 					<div id="panel-element-{{group.id}}" class="panel-collapse collapse">
@@ -202,24 +201,27 @@
 			{% for tag in tags%}
 			<span class="label"><a typr="button" href="?tag={{tag}}">{{tag}}</a></span>
 			{% endfor %}
+
+			{% if user.username %}
 			<li class="divider">
 			</li>
 			<li>
 				
 				<a type='button' href="?group=trash"><span class="glyphicon glyphicon-trash"></span>回收站</a>
 			</li>
+			{% endif %}
 				</ul>
 			</div>
 
 
 			<div class="col-sm-10" style="border-left: solid 2px #000;">
 				<div class="nav-header">
-					笔记预览
+					{% if user.username %}笔记预览{%else%}公开笔记{% endif %}
 				</div>
 				{% for note in notes|dictsort:'update_time'%}
 					<div class="col-sm-12">
 						<div class="thumbnail">	
-							<button type="button" class="close delnote" aria-label="Close"><span aria-hidden="true">&times;</span><span class="hidden">{{note.id}}</span></button>
+							{% if user.username %}<button type="button" class="close delnote" aria-label="Close"><span aria-hidden="true">&times;</span><span class="hidden">{{note.id}}</span></button>{% endif %}
 
 							<div class="caption" style="overflow:hidden;">
 								<span class="hidden">{{note.id}}</span>
@@ -244,7 +246,10 @@
 		</div>
 	</div>
 
+	{% if user.username %}
 	<button class="btn-primary"style="background-color: lightblue;width: 50px;height:50px;border-radius: 25px;position: fixed;right: 50px;bottom: 50px" data-toggle="modal" href="#newnote" onclick="$('#updatenote').hide()"><span class="glyphicon glyphicon-edit"></span></button>
+	{% endif %}
+
 	{% csrf_token %}
 	<div class="modal fade bs-example-modal-lg" id="newnote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
 		  <div class="modal-dialog" role="document">

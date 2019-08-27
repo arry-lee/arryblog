@@ -28,37 +28,7 @@ class User(AbstractUser):
 		get_latest_by = 'id'
 			
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 from db.base_model import BaseModel
-# class User(AbstractUser, BaseModel):
-# 	"""用户模型类"""
-# 	def generate_active_token(self):
-# 		'''生成用户签名字符串'''
-# 		pass
-
-# 	class Meta:
-# 		db_table = 'df_user'
-# 		verbose_name = '用户'
-# 		verbose_name_plural = verbose_name
 
 class AddressManager(models.Manager):
 	"""地址模型管理器"""
@@ -126,8 +96,5 @@ class Activity(models.Model):
 				a.user = user
 				a.activity_date = date 
 
-			# c = Article.objects.filter(user=a.user).filter(creat_time=a.activity_date).count()
-			# if c > 3:
-			# 	c = 4
 			a.activity_level = random.choice(LEVEL)
 			a.save()

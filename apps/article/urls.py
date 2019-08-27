@@ -30,25 +30,3 @@ urlpatterns = [
 	url(r'^timeline/$', ArticleList.as_view(), name='article-list'),
 ]
 
-from article.views import TagViewSet
-
-
-tag_list = TagViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
-tag_detail = TagViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy'
-})
-# tag_color = TagViewSet.as_view({
-#     'get': 'color'
-# }, renderer_classes=[renderers.StaticHTMLRenderer])
-
-
-urlpatterns += [url(r'^tags/$',tag_list,name='tag-list'),
-	url(r'^tags/(?P<pk>\d+)/$',tag_detail,name='tag-detail'),
-	# url(r'^tags/(?P<pk>\d+)/color/$',tag_color,name='tag-color'),
-	]

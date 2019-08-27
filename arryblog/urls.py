@@ -34,6 +34,8 @@ urlpatterns = [
     url(r'^', include('notes.urls',namespace='notes')),  #
     # url(r'^', include('docs.urls',namespace='docs')),
     # url(r'^', include('wx.urls',namespace='weixin'))
+    url(r'^api/', include('api.urls',namespace='api'))
+
 ]
 
 
