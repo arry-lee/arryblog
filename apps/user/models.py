@@ -28,7 +28,7 @@ class User(AbstractUser):
 		get_latest_by = 'id'
 			
 
-from db.base_model import BaseModel
+from utils.db.base_model import BaseModel
 
 class AddressManager(models.Manager):
 	"""地址模型管理器"""

@@ -1,202 +1,355 @@
-{% extends 'index_base.html' %}
+{% extends 'base.html' %}
+{% load cache %}
 {% load staticfiles %}
+{% load user_tags %}
 {% load card_tags %}
 
-{% block panel-0 %}
-	<h4 class="text-normal">最新动态</h4>
-	<div class="row clearfix">	
-		{% for article in new_articles %}
-		<div class="col-md-6 column">
-			<div class="article">
-				<a class="title" href="article/{{article.id}}" >
-					<h4>
-					{{article.title}}
-					</h4>
-				</a>
-				<div class="article-content">
-					<p>
-						{{article.content|striptags|cut:'#'|getlines}}
-					</p>
-				</div>
+{% block title %}
+阿锐的博客-首页
+{% endblock title %}
 
-				<div class="article-foot">
-					<p class="text-right">
-					
-					{% for tag in article.tags.all %}
-				 	<span class="label" style="background-color: {{tag.color}};">{{tag.name}}</span>
-				 	{% endfor %}
-					</p>
-				
-					<div class="text-right"style="font-size:12px;color:gray">
-						<i>本文由 {{article.user}} 创建于 {{article.create_time}}
-						<a href="article/{{article.id}}"> 更多&gt;&gt;&gt;</a></i>
-					</div>
-				</div>
-			</div>
-		</div>
-		{% endfor %}
-	</div>
 
-	<h4 class="text-normal">近一年的贡献</h4>
-	<div class="row clearfix">
-		<div class="js-year-contribution">
-			<span class="contrib-week"><small>Mon</small></span>
-			{% for activity in activitys|slice:'0:366:7'%}
-			<span class='contrib-day' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}" style="background-color: {{activity.activity_level}};">
-				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
-			</span>
-			{% endfor %}
-			<br>
-			<span class="contrib-week"><small>Tue</small></span>
-			{% for activity in activitys|slice:'1:366:7'%}
-			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
-				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
-			</span>
-			{% endfor %}
-			<br>
-			<span class="contrib-week"><small>Wed</small></span>
-			{% for activity in activitys|slice:'2:366:7'%}
-			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
-				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
-			</span>
-			{% endfor %}
-			<br>
-			<span class="contrib-week"><small>Thu</small></span>
-			{% for activity in activitys|slice:'3:366:7'%}
-			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
-				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
-			</span>
-			{% endfor %}
-			<br>
-			<span class="contrib-week"><small>Fri</small></span>
-			{% for activity in activitys|slice:'4:366:7'%}
-			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
-				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
-			</span>
-			{% endfor %}
-			<br>
-			<span class="contrib-week"><small>Sat</small></span>
-			{% for activity in activitys|slice:'5:366:7'%}
-			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
-				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
-			</span>
-			{% endfor %}
-			<br>
-			<span class="contrib-week"><small>Sun</small></span>
-			{% for activity in activitys|slice:'6:366:7'%}
-			<span class='contrib-day' style="background-color: {{activity.activity_level}};">
-				<a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
-			</span>
-			{% endfor %}
-		</div>
+{% block container %}
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-2 column">
+            <div class="row">
+                <div class="col-sm-4 col-md-12 column">
+                    {% cache 500 gravatar%}
+                    {{user.email|gravatar:460}}
+                    {% endcache %}
+                </div>
 
-	</div>
+                <div class="col-sm-8 col-md-12 column">
+                    {% if user.nickname %}
+                    <p class="username">{{user.nickname}}</p>
+                    {% elif user.username%}
+                    <p class="username">{{user.username}}</p>
+                    {% else %}
+                    <p class="username">Arry Lee</p>
+                    {% endif %}
+                    {% if user.slogon %}
+                    <p class="slogon">{{user.slogon}}</p>
+                    {% else %}
+                    <p class="slogon">A real romantic youth.</p>
+                    {% endif %}
+                    <p class="location"><span class="glyphicon glyphicon-map-marker"aria-hidden="true"></span>中国 南京</p>
 
-	<h4 class="text-normal">最近活动</h4>
-	<div class="row clearfix">
-		<div class="col-md-10 column">
-			<div class="row clearfix">
-				<div class="col-md-1 column">
-				</div>
-				<div class="col-md-5 column">
-					<ul class="list-unstyled">
-						{% for article in articles|slice:':4' %}
-						<li>
-							{{article.title}}
-						</li>
-						{% endfor %}
-					</ul>
-				</div>
+                </div>
 
-				<div class="col-md-6 column">
+                <div class="col-sm-12 col-md-12 column">
+                    <div style="margin-top:40px;">
+                        <blockquote>
+                        <p>
+                            {{quote.quote}}
+                        </p> 
+                        <p>
+                            {{quote.translation}}
+                        </p>
+                        <small><cite>{{quote.source}}</cite></small>
+                        </blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9 column">
+            <div class="tabbable" id="tabs-573644">
+                <ul class="nav nav-tabs" id="nav0">
+                    <li class="{% if isindex %}active{% endif %}">
+                        <a href="#panel-0" data-toggle="tab" id="p0">动态{% if articletype_counter %}<span class="Counter">{{article_counter}}</span>{% endif %}</a>
+                    </li>
+                    <li class="{% if not isindex %}active{% endif %}">
+                        <a href="#panel-1" data-toggle="tab" id="p1">文章</a>
+                    </li>
+                    <li>
+                        <a href="#panel-2" data-toggle="tab" id="p2">归档{% if articletype_counter %}<span class="Counter">{{articletype_counter}}</span>{% endif %}</a>
+                    </li>
+                    <li>
+                         <a href="#panel-3" data-toggle="tab" id="p3">想法 </a>
+                    </li>                                                                  
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane {% if isindex %}active{% endif %}" id="panel-0">
+                    {% block panel-0 %}
+                        <h4 class="text-normal">最新动态</h4>
+                        <div class="row clearfix">  
+                            {% for article in new_articles %}
+                            <div class="col-md-6 column">
+                                <div class="article">
+                                    <a class="title" href="article/{{article.id}}" >
+                                        <h4>
+                                        {{article.title}}
+                                        </h4>
+                                    </a>
+                                    <div class="article-content">
+                                        <p>
+                                            {{article.content|striptags|cut:'#'|getlines}}
+                                        </p>
+                                    </div>
 
-				</div>
+                                    <div class="article-foot">
+                                        <p class="text-right">
+                                        
+                                        {% for tag in article.tags.all %}
+                                        <span class="label" style="background-color: {{tag.color}};">{{tag.name}}</span>
+                                        {% endfor %}
+                                        </p>
+                                    
+                                        <div class="text-right"style="font-size:12px;color:gray">
+                                            <i>本文由 {{article.user}} 创建于 {{article.create_time}}
+                                            <a href="article/{{article.id}}"> 更多&gt;&gt;&gt;</a></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
 
-			</div> <a type="button" class="btn btn-default btn-block" href="article/all">显示更多</a>
-		</div>
-		<div class="col-md-2 column">
-			 <a type="button" class="btn btn-default btn-block btn-primary" href="archive/2019">2019</a>
-			 <a type="button" class="btn btn-default btn-block btn-normal" href="archive/2018">2018</a>
-		</div>
-	</div>
-{% endblock panel-0 %}
+                        <h4 class="text-normal">近一年的贡献</h4>
+                        <div class="row clearfix">
+                            <div class="js-year-contribution">
+                                <span class="contrib-week"><small>Mon</small></span>
+                                {% for activity in activitys|slice:'0:366:7'%}
+                                <span class='contrib-day' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}" style="background-color: {{activity.activity_level}};">
+                                    <a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+                                </span>
+                                {% endfor %}
+                                <br>
+                                <span class="contrib-week"><small>Tue</small></span>
+                                {% for activity in activitys|slice:'1:366:7'%}
+                                <span class='contrib-day' style="background-color: {{activity.activity_level}};">
+                                    <a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+                                </span>
+                                {% endfor %}
+                                <br>
+                                <span class="contrib-week"><small>Wed</small></span>
+                                {% for activity in activitys|slice:'2:366:7'%}
+                                <span class='contrib-day' style="background-color: {{activity.activity_level}};">
+                                    <a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+                                </span>
+                                {% endfor %}
+                                <br>
+                                <span class="contrib-week"><small>Thu</small></span>
+                                {% for activity in activitys|slice:'3:366:7'%}
+                                <span class='contrib-day' style="background-color: {{activity.activity_level}};">
+                                    <a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+                                </span>
+                                {% endfor %}
+                                <br>
+                                <span class="contrib-week"><small>Fri</small></span>
+                                {% for activity in activitys|slice:'4:366:7'%}
+                                <span class='contrib-day' style="background-color: {{activity.activity_level}};">
+                                    <a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+                                </span>
+                                {% endfor %}
+                                <br>
+                                <span class="contrib-week"><small>Sat</small></span>
+                                {% for activity in activitys|slice:'5:366:7'%}
+                                <span class='contrib-day' style="background-color: {{activity.activity_level}};">
+                                    <a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+                                </span>
+                                {% endfor %}
+                                <br>
+                                <span class="contrib-week"><small>Sun</small></span>
+                                {% for activity in activitys|slice:'6:366:7'%}
+                                <span class='contrib-day' style="background-color: {{activity.activity_level}};">
+                                    <a class="btn" title='{{activity.activity_date|date:"Ymd"}}' href="{% url 'article:article_day_archive' year=activity.activity_date|date:'Y' month=activity.activity_date|date:'m' day=activity.activity_date|date:'d'%}"></a>
+                                </span>
+                                {% endfor %}
+                            </div>
 
-{% block panel-1 %}
-	<h4 class="text-normal">文章列表</h4>
-	<div class="row clearfix">	
-		<div class="col-md-12 column article">
-			<ul>
-				{% for article in articles %}
-				<li>
-				<a class="title" href="/article/{{article.id}}" >
-					{{article.title}}
-				</a>
-				</li>
-				{% endfor %}
-			</ul>
-		
-			<nav aria-label="Page navigation example">
-			    <ul class="pagination pagination-sm">
+                        </div>
 
-			        {% if articles.has_previous %}
-			            <li class="page-item"><a href="?page=1">首页</a></li>
-			            <li class="page-item"><a href="?page={{ articles.previous_page_number }}">&laquo;</a></li>
-			        {% else %}
-			            <li class="page-item disabled"><span class="page-link">首页</span></li>
-			            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>			        
-			        {% endif %}
-     				
-     				{% for p in page_list %}
-     					{% if p == articles.number %}
-     						<li class="page-item active"><span class="page-link">{{p}}</span></li>
-     					{% else %}
-			       			<li class="page-item "><a href="?page={{p}}">{{p}}</a></li>
-			       		{% endif %}
-			  		{% endfor %}
+                        <h4 class="text-normal">最近活动</h4>
+                        <div class="row clearfix">
+                            <div class="col-md-10 column">
+                                <div class="row clearfix">
+                                    <div class="col-md-1 column">
+                                    </div>
+                                    <div class="col-md-5 column">
+                                        <ul class="list-unstyled">
+                                            {% for article in articles|slice:':4' %}
+                                            <li>
+                                                {{article.title}}
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
 
-			        {% if articles.has_next %}
-			            <li class="page-item"><a href="?page={{ articles.next_page_number }}"> &raquo;</a></li>
-			            <li class="page-item"><a href="?page={{ articles.paginator.num_pages }}">尾页</a></li>
-			        {% else %}
-			    		<li class="page-item disabled"><span class="page-link"> &raquo;</span></li>
-			            <li class="page-item disabled"><span class="page-link">尾页</span></li>
-			        {% endif %}
-			    </ul>
-			</nav>
+                                    <div class="col-md-6 column">
 
-		</div>
-	</div>
-{% endblock panel-1 %}
+                                    </div>
 
-{% block panel-2 %}
-	<h4 class="text-normal">项目列表</h4>
-	<div class="row clearfix">	
-		<div class="col-md-12 column article">
-			<ul>
-				{% for type in types %}
-				<li>
-				<a class="title" href="article/{{type.logo}}/" >
-					{{type}}
-				</a>
-				</li>
-				{% endfor %}
-			</ul>
-		</div>
-	</div>
-{% endblock panel-2 %}
+                                </div> <a type="button" class="btn btn-default btn-block" href="article/all">显示更多</a>
+                            </div>
+                            <div class="col-md-2 column">
+                                 <a type="button" class="btn btn-default btn-block btn-primary" href="archive/2019">2019</a>
+                                 <a type="button" class="btn btn-default btn-block btn-normal" href="archive/2018">2018</a>
+                            </div>
+                        </div>
+                    {% endblock panel-0 %}
+                    </div>
+                    <div class="tab-pane {% if not isindex %}active{% endif %}" id="panel-1">
+                    {% block panel-1 %}
+                        <h4 class="text-normal">文章列表</h4>
+                        <div class="row clearfix">  
+                            <div class="col-md-12 column">
+                                <ul>
+                                    {% for article in articles %}
+                                    <li style="list-style-type: none;">
+                                    <a class="title" href="/article/{{article.id}}" >
+                                        {{article.title}}
+                                    </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            
+                                <nav aria-label="Page navigation example">
+                                    <ul class="pagination pagination-sm">
 
-{% block panel-3 %}
-	<h4 class="text-normal">最近的想法</h4>
-	<div class="row clearfix">	
-		<div class="col-md-12 column article">
-			<ol>
-				{% for note in notes %}
-				<li>			
-					<h5>{{note.title}}</h5>
-					<p>____{{note.content}}</p>
-				</li>
-				{% endfor %}
-			</ol>
-		</div>
-	</div>
-{% endblock panel-3 %}
+                                        {% if articles.has_previous %}
+                                            <li class="page-item"><a href="?page=1">首页</a></li>
+                                            <li class="page-item"><a href="?page={{ articles.previous_page_number }}">&laquo;</a></li>
+                                        {% else %}
+                                            <li class="page-item disabled"><span class="page-link">首页</span></li>
+                                            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>                  
+                                        {% endif %}
+                                        
+                                        {% for p in page_list %}
+                                            {% if p == articles.number %}
+                                                <li class="page-item active"><span class="page-link">{{p}}</span></li>
+                                            {% else %}
+                                                <li class="page-item "><a href="?page={{p}}">{{p}}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+
+                                        {% if articles.has_next %}
+                                            <li class="page-item"><a href="?page={{ articles.next_page_number }}"> &raquo;</a></li>
+                                            <li class="page-item"><a href="?page={{ articles.paginator.num_pages }}">尾页</a></li>
+                                        {% else %}
+                                            <li class="page-item disabled"><span class="page-link"> &raquo;</span></li>
+                                            <li class="page-item disabled"><span class="page-link">尾页</span></li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+
+                            </div>
+                        </div>
+                    {% endblock panel-1 %}
+                    </div>  
+                    <div class="tab-pane" id="panel-2">
+                    {% block panel-2 %}
+                        <h4 class="text-normal">项目列表</h4>
+                        <div class="row clearfix">  
+                            <div class="col-md-12 column">
+                                <ul>
+                                    {% for type in types %}
+                                    <li style="list-style-type: none;">
+                                    <a class="title" href="article/{{type.logo}}/" >
+                                        {{type}}
+                                    </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    {% endblock panel-2 %}
+                    </div>
+                    <div class="tab-pane" id="panel-3">
+                    {% block panel-3 %}
+                        <h4 class="text-normal">最近的想法</h4>
+                        <div class="row clearfix">  
+                            <div class="col-md-12 column">
+                                <ol>
+                                    {% for note in notes %}
+                                    <li>            
+                                        <h5>{{note.title}}</h5>
+                                        <p>____{{note.content}}</p>
+                                    </li>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                        </div>
+                    {% endblock panel-3 %}
+                    </div>                                                                     
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock container %}
+
+
+{% block bottom %}
+<footer class="main-footer small text-center">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <small>网站备案号:皖ICP备19005956号-1</small>
+        </div>
+
+        <div class="col-sm-4">
+            <small>Copyright ©2018-2019. Powered by Django</small>
+        </div>
+
+        <div class="col-sm-4">
+            <small><a href="https://github.com/arry-lee">Github</a></small>
+        </div>
+    </div>
+</div>
+</footer>
+{% endblock bottom %}
+
+{% block modal %}
+<div class="modal fade bs-example-modal-lg" id="newnote" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="exampleModalLabel">新的灵感</h4>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">标题:</label>
+            <input type="text" class="form-control" id="notetitle">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">笔记:</label>
+            <textarea class="form-control" id="notecontent"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        {% csrf_token %}
+        <button type="button" class="btn btn-primary" id="savenote">保存</button>
+      </div>
+    </div>
+  </div>
+{% endblock modal %}
+
+{% block script %}
+<script type="text/javascript">
+  $(function () {
+    $('#savenote').on('click', function () {
+      $title = $('#notetitle').val()
+      $content = $('#notecontent').val()
+      // 必须要有csrftoken认证
+      csrf = $('input[name="csrfmiddlewaretoken"]').val()
+        $.ajax({
+          url: 'notes/',
+          type: 'POST',
+          dataType: 'json',
+          data:{'title':$title,'content':$content,'csrfmiddlewaretoken':csrf}
+      })
+      .done(function(data) {
+          $('#newnote').modal('hide');
+      })
+      .fail(function() {
+          alert('服务器超时，请重试！');
+      });
+    })
+  }); 
+</script>
+{% endblock script %}

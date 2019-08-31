@@ -46,19 +46,18 @@ INSTALLED_APPS = (
     'photo', # 光影模块
     'article', # 文章模块
     'user', # 用户模块
-    'library',# 书架模块
-    'django_comments',
+    # 'library',# 书架模块
+    # 'django_comments',
     'django.contrib.sites',
     'djcelery',
     'rest_framework',
     'card',
     'notes',
-    'docs',
     'api',
 )
 
-COMMENTS_APP = 'library'
-COMMENTS_ALLOW_PROFANITIES = True
+# COMMENTS_APP = 'library'
+# COMMENTS_ALLOW_PROFANITIES = True
 
 # django-celery 相关配置
 import djcelery

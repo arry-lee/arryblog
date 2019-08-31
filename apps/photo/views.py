@@ -27,7 +27,7 @@ class PhotoView(View):
             print("设置缓存")
             cache.set('photo_page',context,3600)
         # 使用模板
-        return render(request, 'photo.html', context)
+        return render(request, 'album/photo.html', context)
 
 # /photo/1
 class AlbumView(View):
@@ -47,7 +47,7 @@ class AlbumView(View):
             # 设置缓存就不用经常查数据库了 key value timeout
             cache.set(key,context,3600)
         # 使用模板
-        return render(request, 'album_detail.html', context)
+        return render(request, 'album/album_detail.html', context)
 
 
 

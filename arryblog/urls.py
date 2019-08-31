@@ -25,7 +25,6 @@ urlpatterns = [
     url(r'^user/', include('user.urls',namespace='user')),  # 用户模块
     url(r'^article/', include('article.urls',namespace='article')),  # 文章模块
     url(r'^photo/', include('photo.urls',namespace='photo')),  # 照片模块
-    url(r'^bookshell/', include('library.urls',namespace='library')),  # 照片模块
     url(r'mdeditor/', include('mdeditor.urls')), # markdown 模块
     url(r'^comments/', include('django_comments.urls')),
     url(r'^', include('article.urls',namespace='article')),  # 文章模块

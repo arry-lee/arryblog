@@ -1,5 +1,5 @@
 from django.db import models
-from db.base_model import BaseModel
+from utils.db.base_model import BaseModel
 from tinymce.models import HTMLField
 from user.models import User
 # Create your models here.
