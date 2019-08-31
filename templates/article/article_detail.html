@@ -16,10 +16,18 @@
 	<hr>
 	<div class="row text-center">
         <div class="col-sm-6">
-        	<a class="title" href="/article/{{article.id|add:'-1'}}" >上一篇</a>
+        	{% if prev %}
+        	<a class="title" href="{{prev.get_absolute_url}}" >上一篇:{{prev.title}}</a>
+        	{% else %}
+        	上一篇:没有了
+        	{% endif %}
         </div>
         <div class="col-sm-6">
-        	<a class="title" href="/article/{{article.id|add:'1'}}" >下一篇</a>
+        	{% if next %}
+        	<a class="title" href="{{next.get_absolute_url}}" >下一篇:{{next.title}}</a>
+        	{% else %}
+        	下一篇:没有了
+        	{% endif %}
         </div>
     </div>
 

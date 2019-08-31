@@ -31,39 +31,6 @@
 {% block container %}
 
 <div class="container">
-<!-- 	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<div class="carousel slide" id="carousel-122195">
-				<ol class="carousel-indicators">
-					<li data-slide-to="0" data-target="#carousel-122195">
-					</li>
-					<li data-slide-to="1" data-target="#carousel-122195">
-					</li>
-					<li data-slide-to="2" data-target="#carousel-122195" class="active">
-					</li>
-				</ol>
-				<div class="carousel-inner">
-					{% for photo in photos%}
-					{% if forloop.first %}
-					<div class="item active">
-					{% else %}
-					<div class="item">
-					{% endif %}
-						<img alt="" src="{{photo.image.url}}">
-						<div class="carousel-caption">
-							<h4>
-								{{photo.title}}
-							</h4>
-							<p>
-								{{photo.content}}
-							</p>
-						</div>
-					</div>
-					{% endfor %}
-				</div> <a class="left carousel-control" href="#carousel-122195" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-122195" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-			</div>
-		</div>
-	</div> -->
 	<h2>相册</h2>
 	<div class="row clearfix">
 		{% for album in albums%}

@@ -24,9 +24,6 @@ import calendar
 import datetime
 
 
-from . import tasks
-
-
 
 
 def get_last_monday(today):
@@ -224,6 +221,26 @@ class ArticleDetail(DetailView):
     # template_name = "article_detail.html" #加上就会找不到
     context_object_name = 'article'
 
+    def get_next(self):
+        id_ = self.object.id
+        try:
+            next_article = Article.objects.filter(id__gt=id_).first()
+            return next_article
+        except:
+            return None
+
+    def get_prev(self):
+        id_ = self.object.id
+        try:
+            next_article = Article.objects.filter(id__lt=id_).first()
+            return next_article
+        except:
+            return None
+
+
+    def get_related(self):
+        pass
+
     def get_context_data(self, **kwargs):
         # 将 md 转换为 html 显示
         context = super().get_context_data(**kwargs)
@@ -234,6 +251,10 @@ class ArticleDetail(DetailView):
 
         context['article'].content = md.convert(context['article'].content)
         context['article'].toc = md.toc
+
+        context['next'] = self.get_next()
+        context['prev'] = self.get_prev()
+
         return context
 
 class ArticleCreate(LoginRequiredMixin,CreateView):
