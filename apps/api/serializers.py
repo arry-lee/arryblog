@@ -33,19 +33,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 from notes.models import Note,Group,Tag
 
-class NoteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Note
-        depth = 1
-        fields = ['id', 'title', 'content','is_delete','owner']
 
-
+class RecursiveField(serializers.Serializer):
+    # 这个类代码保持不变
+    def to_representation(self, value):
+        serializer = self.parent.parent.__class__(value, context=self.context)
+        return serializer.data
 
 class GroupSerializer(serializers.ModelSerializer):
+    label = serializers.CharField(source='name')
+    children = RecursiveField(many=True,read_only=True)
     class Meta:
         model = Group
-        depth = 1
-        fields = ['id', 'name', 'parent']
+        # depth = 1
+        fields = ['id', 'label','children','parent']
 
 from article.models import Tag
 
@@ -53,3 +54,11 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name', 'color']
+
+
+class NoteSerializer(serializers.ModelSerializer):
+    # group = GroupSerializer()
+    class Meta:
+        model = Note
+        # depth = 1
+        fields = ['id', 'title', 'content','is_delete','group','owner']

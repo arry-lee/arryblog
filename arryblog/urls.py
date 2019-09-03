@@ -30,15 +30,19 @@ urlpatterns = [
     url(r'^', include('article.urls',namespace='article')),  # 文章模块
     url(r'^', include('user.urls',namespace='user')), 
     url(r'^', include('card.urls',namespace='card')),  # 卡片模块
-    url(r'^', include('notes.urls',namespace='notes')),  #
+    url(r'^', include('notes.urls',namespace='notes')),
     # url(r'^', include('docs.urls',namespace='docs')),
     # url(r'^', include('wx.urls',namespace='weixin'))
-    url(r'^api/', include('api.urls',namespace='api'))
-
+    url(r'^api/', include('api.urls',namespace='api')),
 ]
 
 
+from django.contrib.flatpages import views
 
+urlpatterns += [
+    url(r'^about-us/', views.flatpage, {'url': '/about-us/'}, name='about'),
+    # path('license/', views.flatpage, {'url': '/license/'}, name='license'),
+]
 # if settings.DEBUG:
 #     # static files (images, css, javascript, etc.)
 #     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

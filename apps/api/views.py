@@ -11,10 +11,16 @@ from user.models import User
 # from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter,OrderingFilter
 
+from django_filters import rest_framework as filters
+
+class NoteFilter(filters.FilterSet):
+    class Meta:
+        model = Note
+        fields = ('group',)
 
 class StandardResultsSetPagination(PageNumberPagination):
 	# 默认每页显示的数据条数
-	page_size = 4
+	page_size = 12
 	# 获取URL参数中设置的每页显示数据条数
 	page_size_query_param = 'page_size'
 
@@ -22,7 +28,7 @@ class StandardResultsSetPagination(PageNumberPagination):
 	page_query_param = 'page'
 
 	# 最大支持的每页显示的数据条数
-	max_page_size = 4
+	max_page_size = 12
 
 
 
@@ -45,8 +51,8 @@ class NoteViewSet(ModelViewSet):
 	serializer_class = NoteSerializer
 
 
-	filter_backends = (SearchFilter,OrderingFilter)
-	# filter_class = GoodsFilter
+	filter_backends = (filters.DjangoFilterBackend,SearchFilter,OrderingFilter)
+	filter_class = NoteFilter
 	search_fields = ('title','content')  # ?search=xxx
 	ordering_fields = ('title',)		 # ?ordering=title&
 
@@ -60,3 +66,6 @@ class GroupViewSet(ModelViewSet):
 
 	queryset = Group.objects.all()
 	serializer_class = GroupSerializer
+
+	def perform_create(self,serializer):
+		serializer.save(owner_id=1)
