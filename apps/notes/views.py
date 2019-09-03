@@ -1,18 +1,18 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from notes.models import Note,Group,Tag
-from django.views.generic import View
-from utils.mixin import LoginRequiredMixin
-from django.views.decorators.http import require_POST
-# 应该同 REST api来写
-# Create your views here.
-from notes.serializers import NoteSerializer,GroupSerializer
-from rest_framework import generics
-from rest_framework.renderers import TemplateHTMLRenderer,JSONRenderer
-from rest_framework.response import Response
-from user.tasks import send_email
-
 from django.core.paginator import Paginator
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views.decorators.http import require_POST
+from django.views.generic import View
+
+from rest_framework import generics
+from rest_framework.renderers import JSONRenderer
+from rest_framework.response import Response
+
+from user.tasks import send_email
+from notes.models import Note,Group,Tag
+from notes.serializers import NoteSerializer,GroupSerializer
+from utils.mixin import LoginRequiredMixin
+
 
 PAZE_SIZE = 12
 
@@ -56,7 +56,6 @@ class NoteList(generics.ListCreateAPIView,LoginRequiredMixin):
 		# print(self.request.POST.get('title'))
 		# print(self.request.POST.get('content'))
 		# print(serializer)
-
 		try:
 			g = Group.objects.get(id=1)# 必须要有一个group 不可为空
 			serializer.save(owner=self.request.user,group=g)
@@ -106,36 +105,3 @@ class GroupList(generics.ListCreateAPIView,LoginRequiredMixin):
 
 	def perform_create(self, serializer):
 		serializer.save(owner=self.request.user)
-
-
-# class GroupDetail(View):
-# 	"""用来获得所有的笔记本组信息或者创建一个新的笔记本组。
-
-# 	"""
-# 	def get(self,request):
-# 		...
-
-# 	def put(self,request):
-# 		...
-
-# 	def delete(self,request):
-# 		...
-
-
-# class NoteMetaDetail(object):
-# 	"""用于对笔记本元信息进行查看"""
-# 	def get(self,request):
-# 		...
-
-
-# class NotePreviewDetail(object):
-# 	"""用于查看笔记本预览内容"""
-# 	def get(self,request):
-# 		...
-
-		
-
-# class NoteAutoAbstract(object):
-# 	"""用于获得笔记本自动生成的摘要信息"""
-# 	def get(self,request):
-# 		...

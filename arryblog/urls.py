@@ -23,26 +23,25 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^search',include('haystack.urls')), # 全文检索框架
     url(r'^user/', include('user.urls',namespace='user')),  # 用户模块
-    url(r'^article/', include('article.urls',namespace='article')),  # 文章模块
     url(r'^photo/', include('photo.urls',namespace='photo')),  # 照片模块
     url(r'mdeditor/', include('mdeditor.urls')), # markdown 模块
     url(r'^comments/', include('django_comments.urls')),
     url(r'^', include('article.urls',namespace='article')),  # 文章模块
-    url(r'^', include('user.urls',namespace='user')), 
+    url(r'^', include('user.urls',namespace='user')),  # 用户模块
     url(r'^', include('card.urls',namespace='card')),  # 卡片模块
-    url(r'^', include('notes.urls',namespace='notes')),
-    # url(r'^', include('docs.urls',namespace='docs')),
-    # url(r'^', include('wx.urls',namespace='weixin'))
+    url(r'^', include('notes.urls',namespace='notes')),# 笔记模块
     url(r'^api/', include('api.urls',namespace='api')),
 ]
 
 
-from django.contrib.flatpages import views
 
+
+# 在此处添加静态页面
+from django.contrib.flatpages import views
 urlpatterns += [
     url(r'^about-us/', views.flatpage, {'url': '/about-us/'}, name='about'),
-    # path('license/', views.flatpage, {'url': '/license/'}, name='license'),
 ]
+
 # if settings.DEBUG:
 #     # static files (images, css, javascript, etc.)
 #     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

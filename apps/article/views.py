@@ -1,39 +1,35 @@
-# from django.core.paginator import Paginator
-# from django_redis import get_redis_connection
-from article.models import Article, ArticleType, Quote
-from notes.models import Note
+import calendar
+import datetime
+import markdown
+from itertools import chain
 
+from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.core.paginator import Paginator
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import View,TemplateView, ListView, DetailView
+from django.views.generic.dates import YearArchiveView, MonthArchiveView, DayArchiveView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from itertools import chain
+
+
+from notes.models import Note
 from user.models import User, Activity
+from article.models import Article, ArticleType, Quote
 from utils.mixin import LoginRequiredMixin
 from utils.shanbay import get_quote
-import datetime
-import markdown
-from django.core.paginator import Paginator
-# # http://127.0.0.1:8000
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
-
-import calendar
-import datetime
-
-
 
 
 def get_last_monday(today):
     '''获取前一个周一'''
     oneday = datetime.timedelta(days = 1)
-    m1 = calendar.MONDAY
-    while today.weekday() != m1:
+    MON = calendar.MONDAY
+    while today.weekday() != MON:
         today -= oneday
-    last_monday = today
-    return last_monday
+    return today
 
 
 class IndexView(View):
@@ -150,47 +146,6 @@ class IndexView(View):
         return render(request, 'index.html', context)
 
 
-# ArticleType 相关视图
-class ArticleTypeList(ListView):
-    # model = ArticleType
-    context_object_name = 'article_type_list'
-    queryset = ArticleType.objects.filter(is_delete=False)
-
-# class ArticleTypeDetail(LoginRequiredMixin,DetailView):
-class ArticleTypeDetail(DetailView):
-    """某一类别的详情视图，
-    显示该类别下面的所有文章
-    """
-    model = ArticleType
-    slug_field = 'logo' # slug 参数对应的域 是SingleObjectMixin里面的
-
-    def get_context_data(self,**kwargs):
-        context = super().get_context_data(**kwargs)
-        # 将查询集添加到上下文
-        if self.request.user.is_authenticated():
-            articles = Article.objects.filter(type=self.object).filter(user=self.request.user)
-        else:
-            articles = Article.objects.filter(type=self.object).filter(user_id=1)
-        context['articles'] = articles
-        return context
-
-class ArticleTypeCreate(LoginRequiredMixin,CreateView):
-    model = ArticleType
-    fields = ['name','logo']
-    success_url = '/article/atypes/'
-
-class ArticleTypeUpdate(LoginRequiredMixin,UpdateView):
-    model = ArticleType
-    fields = ['name','logo']
-
-class ArticleTypeDelete(LoginRequiredMixin,DeleteView):
-    model = ArticleType
-    success_url = '/article/atypes/'
-
-from django.contrib.auth import get_user_model
-
-# Article 相关视图
-# class ArticleList(LoginRequiredMixin,ListView):
 class ArticleList(ListView):
     # model = Article
     template_name = "article_list.html"
@@ -274,9 +229,49 @@ class ArticleDelete(LoginRequiredMixin,DeleteView):
     success_url = '/article/'
 
 
-from django.views.generic.dates import YearArchiveView, MonthArchiveView, DayArchiveView
+class ArticleTypeList(ListView):
+    # model = ArticleType
+    context_object_name = 'article_type_list'
+    queryset = ArticleType.objects.filter(is_delete=False)
 
-# class ArticleYearArchiveView(LoginRequiredMixin,YearArchiveView):
+
+class ArticleTypeDetail(DetailView):
+    """某一类别的详情视图，
+    显示该类别下面的所有文章
+    """
+    model = ArticleType
+    slug_field = 'logo' # slug 参数对应的域 是SingleObjectMixin里面的
+
+    def get_context_data(self,**kwargs):
+        context = super().get_context_data(**kwargs)
+        # 将查询集添加到上下文
+        if self.request.user.is_authenticated():
+            articles = Article.objects.filter(type=self.object).filter(user=self.request.user)
+        else:
+            articles = Article.objects.filter(type=self.object).filter(user_id=1)
+        context['articles'] = articles
+        return context
+
+
+class ArticleTypeCreate(LoginRequiredMixin,CreateView):
+    model = ArticleType
+    fields = ['name','logo']
+    success_url = '/article/atypes/'
+
+
+class ArticleTypeUpdate(LoginRequiredMixin,UpdateView):
+    model = ArticleType
+    fields = ['name','logo']
+
+
+class ArticleTypeDelete(LoginRequiredMixin,DeleteView):
+    model = ArticleType
+    success_url = '/article/atypes/'
+
+
+
+
+
 class ArticleYearArchiveView(YearArchiveView):
     queryset = Article.objects.all()
     date_field = "create_time"
@@ -285,7 +280,6 @@ class ArticleYearArchiveView(YearArchiveView):
     allow_empty = True
 
 
-# class ArticleMonthArchiveView(LoginRequiredMixin,MonthArchiveView):
 class ArticleMonthArchiveView(MonthArchiveView):
     queryset = Article.objects.all()
     date_field = "create_time"
@@ -293,7 +287,7 @@ class ArticleMonthArchiveView(MonthArchiveView):
     allow_future = True
     allow_empty = True
 
-# class ArticleDayArchiveView(LoginRequiredMixin,DayArchiveView):
+
 class ArticleDayArchiveView(DayArchiveView):
     queryset = Article.objects.all()
     date_field = "create_time"

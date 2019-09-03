@@ -1,14 +1,14 @@
-from .models import Snippet
-from .serializers import SnippetSerializer
+from django import forms
+from django.core.cache import cache
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.views.decorators.cache import cache_page
 from rest_framework import generics
 from rest_framework.renderers import TemplateHTMLRenderer,JSONRenderer
 from rest_framework.response import Response
 
-from django import forms
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.decorators.cache import cache_page
-from django.core.cache import cache
+from .models import Snippet
+from .serializers import SnippetSerializer
 
 class SnippetForm(forms.ModelForm):
 	class Meta:

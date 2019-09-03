@@ -1,9 +1,9 @@
 from django.db import models
-from utils.db.base_model import BaseModel
-from tinymce.models import HTMLField
-from user.models import User
-# Create your models here.
 from mdeditor.fields import MDTextField
+
+from utils.db.base_model import BaseModel
+from user.models import User
+
 
 class Album(BaseModel):
     name = models.CharField(max_length=20, verbose_name='相册名称')
