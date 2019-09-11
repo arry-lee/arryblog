@@ -43,7 +43,7 @@ class AddressManager(models.Manager):
 		
 class Address(BaseModel):
 	"""地址模型类"""
-	user = models.ForeignKey('User', verbose_name='所属账户')
+	user = models.ForeignKey('User', verbose_name='所属账户',on_delete=models.CASCADE)
 	receiver = models.CharField(max_length=20, verbose_name='收件人')
 	addr = models.CharField(max_length=256, verbose_name='收件地址')	
 	zip_code = models.CharField(max_length=6, null=True, verbose_name='邮政编码')
@@ -68,7 +68,7 @@ class Activity(models.Model):
 				('#239a3b','3'),
 				('#196127','4'),)
 
-	user = models.ForeignKey('User', verbose_name='所属用户')
+	user = models.ForeignKey('User', verbose_name='所属用户',on_delete=models.CASCADE)
 	activity_date = models.DateField(verbose_name='活动日期')
 	activity_level = models.CharField(max_length=7,default='#ebedf0',choices=ACTIVITY_CHOICES,verbose_name='活动等级')
 

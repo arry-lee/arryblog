@@ -19,8 +19,8 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
                 ('name', models.CharField(max_length=20)),
                 ('create_time', models.DateTimeField(auto_now_add=True)),
-                ('owner', models.ForeignKey(related_name='folders', to=settings.AUTH_USER_MODEL)),
-                ('parent', models.ForeignKey(null=True, related_name='children', to='notes.Group')),
+                ('owner', models.ForeignKey(related_name='folders', to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE)),
+                ('parent', models.ForeignKey(null=True, related_name='children', to='notes.Group',on_delete=models.CASCADE)),
             ],
         ),
         migrations.CreateModel(
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
                 ('name', models.CharField(max_length=20)),
                 ('create_time', models.DateTimeField(auto_now_add=True)),
-                ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE)),
             ],
         ),
         migrations.AddField(
@@ -50,8 +50,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='note',
             name='group',
-            field=models.ForeignKey(default=1, related_name='notes', to='notes.Group'),
-        ),
+            field=models.ForeignKey(default=1, related_name='notes', to='notes.Group',on_delete=models.CASCADE)),
+        
         migrations.AddField(
             model_name='note',
             name='tags',

@@ -14,6 +14,5 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='note',
             name='group',
-            field=models.ForeignKey(null=True, related_name='notes', to='notes.Group'),
-        ),
+            field=models.ForeignKey(null=True, related_name='notes', to='notes.Group',on_delete=models.CASCADE)),
     ]

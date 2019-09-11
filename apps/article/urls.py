@@ -7,6 +7,8 @@ from article.views import (ArticleCreate,
 
 from article import views
 
+app_name='article'
+
 urlpatterns = [
 	url(r'^$', IndexView.as_view(), name='index'), # 首页
 	url(r'^archive/(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/',ArticleDayArchiveView.as_view(month_format='%m'),name="article_day_archive"),

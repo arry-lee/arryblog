@@ -21,8 +21,8 @@ class Album(BaseModel):
 
 
 class Photo(BaseModel):
-    type = models.ForeignKey('Album', verbose_name='照片类型')
-    user = models.ForeignKey('user.User', verbose_name='作者')
+    type = models.ForeignKey('Album', verbose_name='照片类型',on_delete=models.CASCADE)
+    user = models.ForeignKey('user.User', verbose_name='作者',on_delete=models.CASCADE)
     image = models.ImageField(upload_to='photo', verbose_name='原图')
     title = models.CharField(max_length=40, verbose_name='照片标题')
     content = models.CharField(max_length=200, verbose_name='照片描述')

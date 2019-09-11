@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout,get_user_model,REDIRECT_FIELD_NAME
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render,redirect,get_object_or_404
 # from django.urls import reverse
@@ -281,7 +281,7 @@ def account_result(request):
 # 			if user.is_active:
 # 				# 记录用户登录状态
 # 				s = login(request,user)
-# 				print(user.is_authenticated())
+# 				print(user.is_authenticated)
 # 				# 跳转到之前页面或者没有就跳到首页
 # 				next_url = request.GET.get('next',reverse('article:index'))
 # 				response = redirect(next_url)

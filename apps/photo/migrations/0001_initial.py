@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('content', models.CharField(verbose_name='照片描述', max_length=200)),
                 ('view', models.IntegerField(verbose_name='访问量', default=1)),
                 ('like', models.IntegerField(verbose_name='点赞数', default=1)),
-                ('type', models.ForeignKey(verbose_name='照片类型', to='photo.Album')),
+                ('type', models.ForeignKey(verbose_name='照片类型', to='photo.Album',on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': '照片',

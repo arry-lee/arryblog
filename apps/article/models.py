@@ -4,7 +4,7 @@ from tinymce.models import HTMLField
 from user.models import User
 # Create your models here.
 from mdeditor.fields import MDTextField
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 class ArticleType(BaseModel):
     '''文章类型模型类'''
@@ -40,8 +40,8 @@ class Tag(BaseModel):
 class Article(BaseModel):
     '''文章模型类'''
 
-    type = models.ForeignKey('ArticleType', verbose_name='文章类型')
-    user = models.ForeignKey('user.User', verbose_name='作者')
+    type = models.ForeignKey('ArticleType', verbose_name='文章类型',on_delete=models.CASCADE)
+    user = models.ForeignKey('user.User', verbose_name='作者',on_delete=models.CASCADE)
     tags = models.ManyToManyField('Tag', verbose_name='标签集')
     title = models.CharField(max_length=40, verbose_name='文章标题')
     content = MDTextField(blank=True, verbose_name='文章内容')
@@ -61,7 +61,7 @@ class Article(BaseModel):
 
 class ArticleImage(BaseModel):
     '''文章图片模型类'''
-    article = models.ForeignKey('Article', verbose_name='所属文章')
+    article = models.ForeignKey('Article', verbose_name='所属文章',on_delete=models.CASCADE)
     image = models.ImageField(upload_to='article', verbose_name='图片路径')
 
     class Meta:
@@ -71,8 +71,8 @@ class ArticleImage(BaseModel):
 
 class Comment(BaseModel):
     '''评论模型类'''
-    article = models.ForeignKey('Article', verbose_name='所评论文章')
-    user = models.ForeignKey('user.User', verbose_name='作者')
+    article = models.ForeignKey('Article', verbose_name='所评论文章',on_delete=models.CASCADE)
+    user = models.ForeignKey('user.User', verbose_name='作者',on_delete=models.CASCADE)
     content = HTMLField(blank=True, verbose_name='评论内容')
 
     class Meta:

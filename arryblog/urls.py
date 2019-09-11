@@ -20,9 +20,8 @@ from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),# 自动文档
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^search',include('haystack.urls')), # 全文检索框架
-    url(r'^user/', include('user.urls',namespace='user')),  # 用户模块
     url(r'^photo/', include('photo.urls',namespace='photo')),  # 照片模块
     url(r'mdeditor/', include('mdeditor.urls')), # markdown 模块
     url(r'^comments/', include('django_comments.urls')),

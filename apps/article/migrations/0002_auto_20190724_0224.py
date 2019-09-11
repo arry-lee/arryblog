@@ -16,13 +16,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='comment',
             name='user',
-            field=models.ForeignKey(verbose_name='作者', to=settings.AUTH_USER_MODEL),
-        ),
+            field=models.ForeignKey(verbose_name='作者', to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE)),
+        
         migrations.AddField(
             model_name='articleimage',
             name='article',
-            field=models.ForeignKey(verbose_name='所属文章', to='article.Article'),
-        ),
+            field=models.ForeignKey(verbose_name='所属文章', to='article.Article',on_delete=models.CASCADE)),
+        
         migrations.AddField(
             model_name='article',
             name='tags',
@@ -31,11 +31,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='article',
             name='type',
-            field=models.ForeignKey(verbose_name='文章类型', to='article.ArticleType'),
-        ),
+            field=models.ForeignKey(verbose_name='文章类型', to='article.ArticleType',on_delete=models.CASCADE)),
+        
         migrations.AddField(
             model_name='article',
             name='user',
-            field=models.ForeignKey(verbose_name='作者', to=settings.AUTH_USER_MODEL),
-        ),
+            field=models.ForeignKey(verbose_name='作者', to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE)),
+        
     ]

@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
                 ('activity_date', models.DateField(verbose_name='活动日期')),
                 ('activity_level', models.CharField(verbose_name='活动等级', max_length=7, default='#ebedf0', choices=[('#ebedf0', '0'), ('#c6e48b', '1'), ('#7bc96f', '2'), ('#239a3b', '3'), ('#196127', '4')])),
-                ('user', models.ForeignKey(verbose_name='所属用户', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(verbose_name='所属用户', to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': '活动表',
@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
                 ('zip_code', models.CharField(verbose_name='邮政编码', max_length=6, null=True)),
                 ('phone', models.CharField(verbose_name='联系电话', max_length=11)),
                 ('is_defalut', models.BooleanField(verbose_name='是否默认', default=False)),
-                ('user', models.ForeignKey(verbose_name='所属账户', to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(verbose_name='所属账户', to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': '地址',

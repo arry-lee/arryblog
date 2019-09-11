@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('create_time', models.DateTimeField(verbose_name='创建时间', auto_now_add=True)),
                 ('update_time', models.DateTimeField(verbose_name='更新时间', auto_now=True)),
                 ('is_delete', models.BooleanField(verbose_name='删除标记', default=False)),
-                ('owner', models.ForeignKey(verbose_name='作者', to=settings.AUTH_USER_MODEL)),
+                ('owner', models.ForeignKey(verbose_name='作者', to=settings.AUTH_USER_MODEL,on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': '笔记',

@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
                 ('update_time', models.DateTimeField(verbose_name='更新时间', auto_now=True)),
                 ('is_delete', models.BooleanField(verbose_name='删除标记', default=False)),
                 ('content', tinymce.models.HTMLField(verbose_name='评论内容', blank=True)),
-                ('article', models.ForeignKey(verbose_name='所评论文章', to='article.Article')),
+                ('article', models.ForeignKey(verbose_name='所评论文章', to='article.Article',on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': '评论',

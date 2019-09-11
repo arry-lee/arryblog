@@ -6,7 +6,7 @@ from itertools import chain
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.core.paginator import Paginator
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
@@ -40,7 +40,7 @@ class IndexView(View):
         # 如果是认证用户则显示自己的文章，否则显示管理员的文章
         # context = cache.get('index_page')
         if True:
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 articles = Article.objects.filter(user_id=request.user.id).filter(is_delete=False).order_by('-create_time')
                 # 用户文章数量不够则用管理员的文章补齐4个
                 if len(articles)<4:
@@ -57,7 +57,7 @@ class IndexView(View):
             today = datetime.datetime.today()
             # 获取最近一年的活动
             
-            user = request.user if request.user.is_authenticated() else 1
+            user = request.user if request.user.is_authenticated else 1
 
             activitys = cache.get('activitys')
             if not activitys:
@@ -125,7 +125,7 @@ class IndexView(View):
             article_counter = Article.objects.filter(create_time__gt = today).count()
             articletype_counter = ArticleType.objects.filter(create_time__gt = today).count()
             
-            if request.user.is_authenticated():
+            if request.user.is_authenticated:
                 notes = Note.objects.filter(owner_id=request.user.id)[:5]
             else:
                 notes = Note.objects.filter(owner_id=1)[:5]
@@ -153,7 +153,7 @@ class ArticleList(ListView):
 
     def get_queryset(self):
         # 动态构建query_set self.request.user
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             return Article.objects.filter(user = self.request.user)
         else:
             # 没登录就显示我的文章
@@ -245,7 +245,7 @@ class ArticleTypeDetail(DetailView):
     def get_context_data(self,**kwargs):
         context = super().get_context_data(**kwargs)
         # 将查询集添加到上下文
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             articles = Article.objects.filter(type=self.object).filter(user=self.request.user)
         else:
             articles = Article.objects.filter(type=self.object).filter(user_id=1)
