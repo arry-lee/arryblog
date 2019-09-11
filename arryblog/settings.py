@@ -35,7 +35,6 @@ if IP == pr.SERVER_IP:
 else:
     DEBUG = True
 
-
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = (
@@ -67,24 +66,9 @@ INSTALLED_APPS = (
     # 'django_comments',
 )
 
-# COMMENTS_APP = 'library'
-# COMMENTS_ALLOW_PROFANITIES = True
-
-# django-celery 相关配置
-import djcelery
-djcelery.setup_loader()
-BROKER_URL  = "redis://localhost:6379/3"
-CELERY_RESULT_BACKEND = "redis://localhost:6379/3"
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TASK_RESULT_EXPIRES = 60*60*24
-CELERY_TIMEZONE = 'Asia/Shanghai'
-CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
 
-
-SITE_ID = 1
-
-MIDDLEWARE = (
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -92,9 +76,10 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
     'django.contrib.admindocs.middleware.XViewMiddleware',#doc
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-)
+]
 
 ROOT_URLCONF = 'arryblog.urls'
 
@@ -116,7 +101,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'arryblog.wsgi.application'
 
+# COMMENTS_APP = 'library'
+# COMMENTS_ALLOW_PROFANITIES = True
 
+# django-celery 相关配置
+import djcelery
+djcelery.setup_loader()
+BROKER_URL  = "redis://localhost:6379/3"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/3"
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_RESULT_EXPIRES = 60*60*24
+CELERY_TIMEZONE = 'Asia/Shanghai'
+CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+
+
+SITE_ID = 1
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -133,10 +133,26 @@ DATABASES = {
 
 # django认证系统使用的模型类
 AUTH_USER_MODEL='user.User'
-AUTHENTICATION_BACKENDS = [
-    'user.user_login_backend.EmailOrUsernameModelBackend',# 自定义的后端认证类
-    'django.contrib.auth.backends.ModelBackend',
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
 ]
+
+# AUTHENTICATION_BACKENDS = [
+#     'user.user_login_backend.EmailOrUsernameModelBackend',# 自定义的后端认证类
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
     
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -183,7 +199,7 @@ ADMINS = pr.ADMINS
 CACHES = {
     "default":{
         "BACKEND":"django_redis.cache.RedisCache",
-        "LOCATION":"redis://localhost:6379/9",
+        "LOCATION":"redis://localhost:6379",
         "OPTIONS":{
             "CLIENT_CLASS":"django_redis.client.DefaultClient"
         }
@@ -212,7 +228,7 @@ DEFAULT_FILE_STORAGE='utils.fdfs.storage.FDFSStorage'
 # 设置fdfs使用的client.conf文件路径
 FDFS_CLIENT_CONF = './utils/fdfs/client.conf'
 # 设置Nginx服务器的ip和端口号
-FDFS_URL_PREFIX = 'http://%s:8888/' % IP
+FDFS_URL_PREFIX = 'http://%s:8888/' % pr.SERVER_IP
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'

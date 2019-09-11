@@ -22,6 +22,7 @@ from utils.mixin import LoginRequiredMixin
 from utils.utils import get_md5
 from .tasks import send_active_email
 import logging
+
 from django.core.cache import cache
 logger = logging.getLogger(__name__)
 
@@ -118,7 +119,7 @@ class LoginView(FormView):
     def get_success_url(self):
 
         redirect_to = self.request.POST.get(self.redirect_field_name)
-        if not is_safe_url(url=redirect_to):
+        if not is_safe_url(url=redirect_to,allowed_hosts='arrylee.com'):
             redirect_to = self.success_url
         return redirect_to
 

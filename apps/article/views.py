@@ -20,7 +20,7 @@ from notes.models import Note
 from user.models import User, Activity
 from article.models import Article, ArticleType, Quote
 from utils.mixin import LoginRequiredMixin
-from utils.shanbay import get_quote
+from utils.utils import get_quote
 
 
 def get_last_monday(today):
