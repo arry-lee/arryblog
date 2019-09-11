@@ -112,3 +112,4 @@ whoosh_index/
 *.ini
 *.log
 celerybeat-schedule
+*private.py
