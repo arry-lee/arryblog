@@ -4,12 +4,12 @@
 }
 
 .navbar-inverse {
-    background-color: #24292e;
-    border-color: #080808;
+    background-color: #008C8C;
+    border-color: #008C8C;
 }
 
 .form-control{
-    background-color: hsla(0,0%,100%,.125);
+    /*background-color: hsla(0,0%,100%,.125);*/
     border: 0;
     height: 28px;
     margin-top: 4px;
@@ -30,7 +30,7 @@
 }
 
 .glyphicon-search{
-    color: #555;
+    color: #fff;
 }
 
 
@@ -151,31 +151,11 @@ a {
     padding-right: 10px;
 }
 
-/*
-.player{
-    width: 200px;
-    border: 1px dashed #000;
-    color: green;
-}*/
 
 .player {
     background-color: gold;
 }
 
-/*.progress-li {
-  padding-top: 30px;
-  display: inline-block;  
-}
-.player-progress {  
-    display: inline;
-    background-color:gold;
-    width: 200px;
-}*/
-
-/*.progress .progress-bar{
-    width: 40%;
-    background-color: #24292e;
-}*/
 
 .form-signin{
     margin-top: 50px;

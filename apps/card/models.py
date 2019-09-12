@@ -24,3 +24,6 @@ class Snippet(models.Model):
         db_table = 'df_snippet'
         verbose_name = '代码段'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.reason

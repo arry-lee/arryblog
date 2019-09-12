@@ -92,7 +92,7 @@ class IndexView(View):
 
             # 分页器，若是首页则激活动态这个panel,
             # 要是有 page 参数则是文章选项卡
-            paginator = Paginator(articles,6)
+            paginator = Paginator(articles,12)
 
             page = request.GET.get('page')
             if page is None:

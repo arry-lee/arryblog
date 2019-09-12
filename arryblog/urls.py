@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
 
+from django.views.generic.base import RedirectView
+
 urlpatterns = [
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),# 自动文档
     url(r'^admin/', admin.site.urls),
@@ -30,6 +32,7 @@ urlpatterns = [
     url(r'^', include('card.urls',namespace='card')),  # 卡片模块
     url(r'^', include('notes.urls',namespace='notes')),# 笔记模块
     url(r'^api/', include('api.urls',namespace='api')),
+    url(r'^favicon\.ico$',RedirectView.as_view(url='static/favicon.ico'))
 ]
 
 

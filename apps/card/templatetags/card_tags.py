@@ -10,16 +10,16 @@ register = template.Library()
 
 @register.filter
 def highlight_code(code, lang): 
-	if code is not None: 
+	if code is not None:
 		try: 
 			lexer = get_lexer_by_name(lang, encoding='utf-8', stripall=True, startinline=True) 
 		except ClassNotFound: 
 			lexer = get_lexer_by_name('text') 
 		formatter = HtmlFormatter(encoding='utf-8', style='monokai', 
 													linenos=False, cssclass='syntax') 
-		return mark_safe(highlight(code, lexer, formatter))   
+		return highlight(code, lexer, formatter).decode('utf-8') 
 	else: 
-		return mark_safe(code)
+		return code.decode('utf-8')
 
 @register.filter
 def getlines(data,n=6): 
