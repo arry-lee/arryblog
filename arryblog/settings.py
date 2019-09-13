@@ -30,7 +30,7 @@ SECRET_KEY = pr.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 # 以当前IP来判断是否是线上环境决定DEBUG行为
 IP = socket.gethostbyname(socket.getfqdn(socket.gethostname()))
-if IP == pr.SERVER_IP:
+if IP == pr.SERVER_INET_ADDR:
     DEBUG = False
 else:
     DEBUG = True

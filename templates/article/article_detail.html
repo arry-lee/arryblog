@@ -2,16 +2,19 @@
 {% load card_tags %}
 {% block middle %}
 	<div class="page-header">
-	  <h1>{{article.title}} </h1>
+		<h1>{{article.title}} </h1>
+		<p class="text-right"> {{article.create_time}} {{article.user}} 阅读数 {{article.view}} </p>
+		<p class="text-right"> 所属专栏:
+		<a href="{% url 'article:articletype-detail' slug=article.type.logo %}" >{{article.type}}</a>
+		</p>
+		<p class="text-right"> 所有标签:
+		{% for tag in article.tags.all %}
+			<span class="label" style="background-color:{{tag.color}}">{{tag.name}}</span>
+			{% endfor %}
+		</p>
 	</div>
 
-	<p class="text-right"><small >@{{article.user}}</small></p>
-	
-	<p class="text-right">
-	{% for tag in article.tags.all %}
- 	<span class="label" style="background-color:{{tag.color}}">{{tag.name}}</span>
- 	{% endfor %}
-	</p>
+
 	{{article.content|safe}}
 	<hr>
 	<div class="row text-center">
@@ -53,6 +56,7 @@
 
 
 {% block script %}
+
 <script type="text/javascript">
 	$(function () {
 	  $('table').addClass('table table-striped well');	

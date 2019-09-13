@@ -168,6 +168,12 @@ class ArticleDetail(DetailView):
     # template_name = "article_detail.html" #加上就会找不到
     context_object_name = 'article'
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        obj.view += 1
+        obj.save()
+        return obj
+    
     def get_next(self):
         id_ = self.object.id
         try:
