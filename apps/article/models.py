@@ -59,6 +59,8 @@ class Article(BaseModel):
     def __str__(self):
         return self.title
 
+
+
 class ArticleImage(BaseModel):
     '''文章图片模型类'''
     article = models.ForeignKey('Article', verbose_name='所属文章',on_delete=models.CASCADE)
@@ -101,3 +103,14 @@ class Quote(models.Model):
 
     def __str__(self):
         return self.quote
+
+
+# 控制评论行为
+from django_comments.moderation import CommentModerator, moderator
+class ArticleModerator(CommentModerator):
+    email_notification = True
+    auto_close_field   = 'create_time'
+    # Close the comments after 365 days.
+    close_after        = 365
+
+moderator.register(Article, ArticleModerator)

@@ -1,0 +1,44 @@
+{% load comments i18n %}
+<form action="{% comment_form_target %}" method="post" class="form-horizontal">{% csrf_token %}
+  {% if next %}
+    <div><input type="hidden" name="next" value="{{ next }}"/></div>{% endif %}
+  {% for field in form %}
+    {% if field.is_hidden %}
+      <div>{{ field }}</div>
+    {% else %}
+    {% if field.errors %}{{ field.errors }}{% endif %}
+    {% endif %}
+  {% endfor %}
+
+<div class="form-group">
+  <label class="col-sm-1 control-label" >姓名:</label>
+  <div class="col-sm-11">
+  <input type="text" class="form-control" name="name" placeholder="怎么称呼呢">  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-sm-1 control-label">邮箱:</label>
+  <div class="col-sm-11">
+    <input type="email" class="form-control" name="email" placeholder="Email 地址不会显示在评论区">
+  </div>
+</div>
+
+<div class="form-group">
+  <label class="col-sm-1 control-label">URL:</label>
+  <div class="col-sm-11">
+    <input type="url" class="form-control" name="url" placeholder="可以填你的网址也可以不填">
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-sm-1 control-label">评论:</label>
+  <div class="col-sm-11">
+    <textarea name="comment" class="form-control" rows="3" placeholder="想要说点什么"></textarea>
+  </div>
+</div>
+<div class="form-group">
+  <div class="col-sm-offset-1 col-sm-10">
+    <button type="submit" class="btn btn-default" name="post">发布</button>
+    <button type="submit" class="btn btn-default" name="preview">预览</button>
+  </div>
+</div>
+</form>

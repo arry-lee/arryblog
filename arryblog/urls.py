@@ -19,6 +19,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from django.views.generic.base import RedirectView
+from django_comments.feeds import LatestCommentFeed
 
 urlpatterns = [
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),# 自动文档
@@ -32,17 +33,11 @@ urlpatterns = [
     url(r'^', include('card.urls',namespace='card')),  # 卡片模块
     url(r'^', include('notes.urls',namespace='notes')),# 笔记模块
     url(r'^api/', include('api.urls',namespace='api')),
-    url(r'^favicon\.ico$',RedirectView.as_view(url='static/favicon.ico'))
+    url(r'^favicon\.ico$',RedirectView.as_view(url='static/favicon.ico')),
+    url(r'^comments/', include('django_comments.urls')),
+    url(r'^feeds/latest/$', LatestCommentFeed()),
 ]
 
-
-
-
-# 在此处添加静态页面
-from django.contrib.flatpages import views
-urlpatterns += [
-    url(r'^about-us/', views.flatpage, {'url': '/about-us/'}, name='about'),
-]
 
 # if settings.DEBUG:
 #     # static files (images, css, javascript, etc.)

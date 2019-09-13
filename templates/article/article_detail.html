@@ -30,13 +30,20 @@
         	{% endif %}
         </div>
     </div>
-
+	<hr>
+	{% load comments %}
+	<h4><strong>相关评论</strong></h4>
+	{% render_comment_list for article %}
+	<h4><strong>发表评论</strong></h4>
+	{% render_comment_form for article %}
 {% endblock middle %}
 
 {% block right %}
-<div class="sidebar hidden-print hidden-xs hidden-sm">	
+<div class="sidebar hidden-print hidden-xs hidden-sm">
+	{% ifnotequal article.toc|length 35 %}
 	<h4><strong>目录</strong></h4>
 	{{ article.toc|safe }}
+	{% endifnotequal %}
 </div> 
 {% endblock%}
 

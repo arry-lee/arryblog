@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     'django.contrib.flatpages',
     'django.contrib.sites',
@@ -63,7 +64,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'django_filters',
     # 'tinymce',  # 富文本编辑器
-    # 'django_comments',
+    'django_comments',
 )
 
 
@@ -101,8 +102,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'arryblog.wsgi.application'
 
-# COMMENTS_APP = 'library'
-# COMMENTS_ALLOW_PROFANITIES = True
+COMMENTS_APP = 'article'
+
 
 # django-celery 相关配置
 import djcelery
@@ -167,7 +168,7 @@ USE_L10N = True
 
 USE_TZ = False
 
-
+# PREPEND_WWW = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
@@ -192,6 +193,8 @@ EMAIL_HOST_USER = pr.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = pr.EMAIL_HOST_PASSWORD
 #收件人看到的发件人
 EMAIL_FROM = pr.EMAIL_FROM
+EMAIL_USE_TLS = True
+# DEFAULT_FROM_EMAIL = pr.DEFAULT_FROM_EMAIL
 
 ADMINS = pr.ADMINS
 

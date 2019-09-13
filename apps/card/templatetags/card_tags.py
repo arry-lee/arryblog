@@ -19,7 +19,7 @@ def highlight_code(code, lang):
 													linenos=False, cssclass='syntax') 
 		return highlight(code, lexer, formatter).decode('utf-8') 
 	else: 
-		return code.decode('utf-8')
+		return code
 
 @register.filter
 def getlines(data,n=6): 
