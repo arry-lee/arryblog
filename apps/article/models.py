@@ -48,6 +48,9 @@ class Article(BaseModel):
     view = models.IntegerField(default=1, verbose_name='访问量')
     like = models.IntegerField(default=1, verbose_name='点赞数')
 
+    enable_comments = models.BooleanField(default=True,verbose_name='允许评论')
+    is_public = models.BooleanField(default=True,verbose_name='是否公开')
+    
     class Meta:
         db_table = 'df_article'
         verbose_name = '文章'
@@ -94,13 +97,6 @@ class Quote(models.Model):
         verbose_name = '每日一句'
         verbose_name_plural = verbose_name
 
-    # @classmethod
-    # def create(cls, quote,translation,source):
-    #     book = cls(quote=content,translation=translation,source=source)
-    #     book.save()
-    #     # do something with the book
-    #     return book
-
     def __str__(self):
         return self.quote
 
@@ -112,5 +108,6 @@ class ArticleModerator(CommentModerator):
     auto_close_field   = 'create_time'
     # Close the comments after 365 days.
     close_after        = 365
+    enable_field = 'enable_comments'
 
 moderator.register(Article, ArticleModerator)

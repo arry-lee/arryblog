@@ -102,7 +102,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'arryblog.wsgi.application'
 
-COMMENTS_APP = 'article'
+COMMENT_MAX_LENGTH = 140
 
 
 # django-celery 相关配置

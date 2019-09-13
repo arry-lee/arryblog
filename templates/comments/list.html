@@ -1,6 +1,7 @@
 {% load humanize %}
 <div id="comments">
   {% for comment in comment_list reversed %}
+  	
     <div id="c{{ comment.id }}">
 	    <div class="col-sm-2">
 	      @{{ comment.name }}

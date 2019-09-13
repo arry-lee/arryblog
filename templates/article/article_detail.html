@@ -32,7 +32,9 @@
     </div>
 	<hr>
 	{% load comments %}
+	{% get_comment_count for article as comment_count %}
 	<h4><strong>相关评论</strong></h4>
+	<p>共有 {{comment_count}} 条评论</p>
 	{% render_comment_list for article %}
 	<h4><strong>发表评论</strong></h4>
 	{% render_comment_form for article %}
