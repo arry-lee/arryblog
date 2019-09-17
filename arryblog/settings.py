@@ -65,6 +65,7 @@ INSTALLED_APPS = (
     'django_filters',
     # 'tinymce',  # 富文本编辑器
     'django_comments',
+    'wx',
 )
 
 

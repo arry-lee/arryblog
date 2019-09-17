@@ -36,6 +36,8 @@ urlpatterns = [
     url(r'^favicon\.ico$',RedirectView.as_view(url='static/favicon.ico')),
     url(r'^comments/', include('django_comments.urls')),
     url(r'^feeds/latest/$', LatestCommentFeed()),
+    url(r'^', include('wx.urls',namespace='wx')),
+
 ]
 
 

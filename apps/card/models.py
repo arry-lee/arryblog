@@ -27,3 +27,30 @@ class Snippet(models.Model):
 
     def __str__(self):
         return self.reason
+
+LEVEL_CHOICES = (
+    (1,'easy'),
+    (2,'normal'),
+    (3,'hard'),
+)
+
+
+class LeetCode(models.Model):
+    title = models.CharField(verbose_name='标题',max_length=40)
+    slug = models.SlugField(max_length=100,unique=True)
+    level = models.IntegerField(choices=LEVEL_CHOICES,verbose_name='等级')
+    desc = models.TextField(verbose_name='描述')
+    code = models.TextField(null=True,blank=True,verbose_name='代码')
+    idea = models.TextField(null=True,blank=True,verbose_name='题解')
+
+    enable_comments = models.BooleanField(default=True,verbose_name='开放评论')
+
+    class Meta:
+        db_table = 'df_leetcode'
+        verbose_name = '算法题'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.title
+
+        

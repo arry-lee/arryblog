@@ -14,7 +14,7 @@ from django.views.decorators.cache import cache_page
 from django.views.generic import View,TemplateView, ListView, DetailView
 from django.views.generic.dates import YearArchiveView, MonthArchiveView, DayArchiveView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-
+from django.db.models import F
 
 from notes.models import Note
 from user.models import User, Activity
@@ -168,11 +168,12 @@ class ArticleDetail(DetailView):
     # template_name = "article_detail.html" #加上就会找不到
     context_object_name = 'article'
 
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset=queryset)
-        obj.view += 1
-        obj.save()
-        return obj
+    def get(self,request,*args,**kwargs):
+        response = super().get(request,*args,**kwargs)
+        # 更新字段比较好的方式
+        Article.objects.filter(id=self.object.id).update(view=F('view')+1)
+        return response
+
     
     def get_next(self):
         id_ = self.object.id
